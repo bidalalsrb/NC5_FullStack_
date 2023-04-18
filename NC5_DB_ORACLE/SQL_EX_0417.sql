@@ -30,7 +30,6 @@ group by GROUPING SETS (E.JOB, DNAME)
 -- 2
 
 --1) 각 과목의 과목번호, 과목명, 담당 교수의 교수번호, 교수명을 검색하라(NATURAL JOIN 사용)
-
 SELECT CNO, CNAME, PNO, PNAME
 FROM COURSE
          NATURAL JOIN PROFESSOR
@@ -75,9 +74,9 @@ WHERE MAJOR = '화학'
 --1) 다중 컬럼 IN절을 이용해서 기말고사 성적이 80점 이상인 과목번호, 학생번호, 기말고사 성적을 모두 조회하세요.
 SELECT *
 FROM C##MG.SCORE
-WHERE (SNO, CNO, RESULT) IN (SELECT SNO, CNO, RESULT
-                             FROM C##MG.SCORE
-                             WHERE RESULT >= 80)
+WHERE (SNO, CNO) IN (SELECT SNO, CNO
+                     FROM C##MG.SCORE
+                     WHERE RESULT >= 80)
 
 
 --2) 다중 컬럼 IN절을 이용해서 화학과나 물리학과면서 학년이 1, 2, 3학년인 학생의 정보를 모두 조회하세요.
@@ -87,8 +86,6 @@ WHERE (MAJOR, SYEAR) IN (SELECT MAJOR, SYEAR
                          FROM STUDENT
                          WHERE MAJOR IN ('물리', '화학')
                            AND SYEAR IN ('1', '2', '3'))
-
-
 
 --3) 다중 컬럼 IN절을 사용해서 부서가 10, 20, 30이면서
 -- 보너스가 1000이상인 사원의 사원번호, 사원이름, 부서번호, 부서이름, 업무, 급여, 보너스를
@@ -120,9 +117,8 @@ WHERE RESULT IN (SELECT RESULT
 WITH PRO AS (SELECT * FROM PROFESSOR WHERE ORDERS = '정교수'),
      COUR AS (SELECT * FROM COURSE WHERE CNAME LIKE '%일반%')
 SELECT COUR.CNO, COUR.CNAME, PRO.PNO, PRO.PNAME
-FROM COUR,
-     PRO
-
+FROM COUR,PRO
+WHERE COUR.PNO = PRO.PNO
 
 --2) WITH 절을 이용하여 급여가 3000이상인 사원정보를 갖는 가상테이블 하나와
 -- 보너스가 500이상인 사원정보를 갖는 가상테이블 하나를 생성하여
@@ -130,9 +126,9 @@ FROM COUR,
 
 WITH MONEY AS (SELECT * FROM EMP WHERE SAL >= 3000),
      BONUS AS (SELECT * FROM EMP WHERE COMM >= 500)
-SELECT MONEY.*
-FROM MONEY,
-     BONUS
+SELECT *
+FROM MONEY
+NATURAL JOIN BONUS
 
 
 
@@ -141,7 +137,7 @@ FROM MONEY,
 -- 학생별 기말고사 평균점수를 갖는 가상테이블 하나를 생성하여
 --   평점이 3.3이상인 학생의 기말고사 평균 점수를 조회하세요.
 WITH SAM AS (SELECT * FROM STUDENT WHERE AVR >= 3.3),
-     AV AS (SELECT SNO, ROUND(AVG(RESULT)) AS QQ FROM C##MG.SCORE group by SNO)
+     AV AS (SELECT SNO, ROUND(AVG(RESULT),2) AS QQ FROM C##MG.SCORE group by SNO)
 SELECT SAM.SNO, SAM.SNAME, AVR, AV.QQ
 FROM SAM,
      AV
@@ -175,3 +171,4 @@ ORDER BY HIREDATE DESC
 
 
 
+V
