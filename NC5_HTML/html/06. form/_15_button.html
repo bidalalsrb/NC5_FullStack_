@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <form action="/user/login">
+        <div>
+            <lebel>아이디
+                <input type="text">
+            </lebel>
+        </div>
+        <div>
+            <lebel>비밀번호
+                <input type="text">
+            </lebel>
+        </div>
+        <div>
+            <!-- 버튼 생성시 기본 타입이 submit -->
+            <button>로그인</button>
+            <!-- 
+                아무 기능 없는 버튼을 만들때는 type="button"으로 지정 
+            -->
+            <button type="button" onclick="alert('클릭')">버튼</button>
+            <button type="reset">리셋</button>
+            <button style="margin: 0; padding: 0; border: 0;"> <img src="/images/login.jpg" alt="로그인버튼"></button>
+        </div>
+    </form>
+</body>
+
+</html>
