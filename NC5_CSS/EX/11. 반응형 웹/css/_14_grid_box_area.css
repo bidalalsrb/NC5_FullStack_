@@ -1,0 +1,58 @@
+.container1 {
+    display: grid;
+    grid-template-columns: repeat(4, 200px);
+    grid-template-rows: 50px 50px 50px 50px;
+    grid-template-areas:
+        "box1 box1 box1 box1"
+        "box2 box2 box3 box4"
+        "box2 box2 box5 box6"
+        "box7 box7 box8 box8";
+}
+
+/*그리드 라인을 이용한 배치는 항목에 지정*/
+.box1 {
+    background: red;
+    grid-area: box1;
+}
+
+.box2 {
+    background: blue;
+    grid-area: box2;
+}
+
+.box3 {
+    background: green;
+    grid-area: box3;
+
+}
+
+.box4 {
+    background: brown;
+    grid-area: box4;
+
+}
+
+.box5 {
+    background: violet;
+    grid-area: box5;
+
+}
+
+.box6 {
+    background: yellow;
+    grid-area: box6;
+
+}
+
+.box7 {
+    background: aqua;
+    grid-area: box7;
+
+}
+
+.box8 {
+    background: yellowgreen;
+    grid-area: box8;
+
+    /* grid-row: 0; */
+}
