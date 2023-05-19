@@ -1,40 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>날짜 객체</title>
 </head>
-
 <body>
     <script>
-        // 현재 날짜 객체 인스턴스화
+        //현재 날짜 객체 인스턴스화
         const nowDate = new Date();
         console.log(`현재 월 : ${nowDate.getMonth() + 1}`);
-        console.log(`현재 일 : ${nowDate.getDate() + 1}`);
-        console.log(`현재 요일 : ${nowDate.getDay() + 1}`);
-        console.log('------------------------------------')
-        // 강의 시작일 객체 인스턴스화
-        const startDate = new Date('2023-03-10');
-        console.log(`현재 월 : ${startDate.getMonth() + 1}`);
-        console.log(`현재 일 : ${startDate.getDate()}`);
-        console.log(`현재 요일 : ${startDate.getDay()}`);
-        console.log('------------------------------------')
+        console.log(`현재 일 : ${nowDate.getDate()}`);
+        console.log(`현재 요일 : ${nowDate.getDay()}`);
 
-        // 2. 연말까지 남은 일자
+        //강의 시작일 객체 인스턴스화
+        const startDate = new Date(2023, 2, 10);
+        console.log(`강의시작 월 : ${startDate.getMonth() + 1}`);
+        console.log(`강의시작 일 : ${startDate.getDate()}`);
+        console.log(`강의시작 요일 : ${startDate.getDay()}`);
+
+        //2. 연말까지 남은 일자
         const lastDay = new Date(2023, 11, 31);
-        // 계산된 결과가 밀리초 단위로 리턴
+
+        //계산된 결과가 밀리초 단위로 리턴
         const timeDiff = lastDay - nowDate;
-        // 밀리초를 일로 변환 -> 밀리초 값 / 1000 -> /60 -> /60 -> /24 -> 밀리초 값 / (1000*60*60*24)
-        
-        const result = Math.ceil(timeDiff/(1000*60*60*24));
+
+        //밀리초를 일로 변환 -> 밀리초값 / 1000 -> / 60 -> / 60 -> / 24 -> 밀리초값 / (1000 * 60 * 60 * 24)
+        const result = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
 
         console.log(`연말까지 남은 일자는 : ${result}`);
-        
-
     </script>
 </body>
-
 </html>
