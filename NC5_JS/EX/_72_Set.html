@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Set</title>
+</head>
+
+<body>
+    <script>
+        const set1 = new Set();
+        console.log(set1);
+
+        const set2 = new Set(["홍길동", "장길산", "임꺽정", "홍길동"]);
+        console.log(set2);
+
+        const set3 = new Set("Es6");
+        console.log(set3);
+
+        // Set 나오기 전에 중복제거
+        const arr = [1, 1, 1, 1, 2, 2, 2, 3, 3, 4, 4, 5, 6, 7];
+
+        // num: 현재값
+        // index : 현재 인덱스
+        // self : arr 배열
+        const filteredArr = arr.filter((num, index, self) => (
+            self.indexOf(num) === index));
+
+        console.log(filteredArr);
+
+        // set등장 이후의 중복제거
+        const filteredArr2 =[...new Set(arr)];
+        console.log(filteredArr2);
+
+        // 요소를 추가하는 add
+        set1.add(111);
+
+        // add는 체이닝 기법 지원
+        set1.add(222).add(333).add(111);
+
+    </script>
+</body>
+
+</html>

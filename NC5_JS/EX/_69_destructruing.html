@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+    <script>
+        const arr = [31, 47, 80];
+        // 매개변수를 비구조화 할당으로 선언
+        const add = ([num1, num2, num3]) => {
+            return num1 + num2 + num3;
+        }
+
+        const sum = add(arr);
+        console.log(sum);
+
+        // 비구조화 할당의 기준은 인덱스
+        // 인덱스 기준으로 순서대로 할당되고 변수의 개수와 
+        // 요소의 개수를 맞춰줄 필요는 없다.
+
+        const minus = ([num1, num2]) => {
+            return num1 - num2;
+        }
+
+        // 31,47만 사용. 80은 사용하지 않음
+        const minu = minus(arr);
+        console.log(minu);
+
+        // Rest파라미터와 함께 사용가능
+        const arr2 = [12, 14, 2, 5, 24];
+
+        const mul = ([num1, num2, ...rest]) => {
+            console.log(rest);
+            const num3 = rest.reduce((pri, cur) => pri * cur, 1)
+            return num1 * num2 *num3;
+        }
+
+        console.log(mul(arr2));
+
+    </script>
+</body>
+
+</html>
