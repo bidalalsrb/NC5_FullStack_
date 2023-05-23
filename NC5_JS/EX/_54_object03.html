@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>메소드 축약표현</title>
+</head>
+<body>
+    <script>
+        //ES5
+        var kiaCar = {
+            price: 10000000,
+            color: 'red',
+            company: 'kia',
+            //ES5에서는 function 키워드를 사용하여 메소드지정
+            info: function() {
+                console.log(this.price);
+                console.log(this.color);
+                console.log(this.company);
+            }
+        };
+
+        //ES6의 메소드 축약표현
+        const hyundaiCar = {
+            price: 20000000,
+            color: 'black',
+            company: 'hyundai',
+            //ES6 메소드 축약표현
+            //function 키워드 생략하여 메소드 선언
+            info() {
+                console.log(this.price);
+                console.log(this.color);
+                console.log(this.company);
+            }
+        };
+
+        kiaCar.info();
+        hyundaiCar.info();
+    </script>
+</body>
+</html>
