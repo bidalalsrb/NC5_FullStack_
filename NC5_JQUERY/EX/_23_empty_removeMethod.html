@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>append()/appendTo()/prepend()/prependTo()</title>
+    <script src="js/jquery-3.7.0.min.js"></script>
+    <style>
+        table {
+            border-collapse: collapse;
+        }
+
+        table, td, th {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+    <table id="tbl1">
+        <thead>
+        <tr>
+        <th>번호</th>
+        <th>번호</th>
+        <th>제목</th>
+        <th>작성자</th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr>
+            <th>번호</th>
+            <th>번호</th>
+            <th>제목</th>
+            <th>작성자</th>
+            </tr>
+        </tbody>
+    </table>
+   <script>
+    //1. empty(): 하위 태그들 모두 삭제
+    $("#tbl1").empty();
+
+    //2. remove(): 해당 태그 삭제
+    const timeOut = setTimeout(() => {
+        $("#btl2").remove();
+    })
+   </script>
+</body>
+</html>

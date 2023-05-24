@@ -1,14 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>check와 메소드</title>
-    <script src="../js/jquery-3.7.0.min.js"></script>
+    <script src="js/jquery-3.7.0.min.js"></script>
 </head>
-
 <body>
     <label>
         <input type="checkbox" name="food" value="치킨">치킨
@@ -44,16 +42,19 @@
     <script>
         const orderList = [];
 
-        // Jquery 이벤트 매핑방식
+        //jquery 이벤트 매핑방식
         $("#btn").on("click", () => {
-            $("input[type='checkbox']").each(function () {
-                if ($(this).is(":checked")) {
+            //체크박스 태그들 하나씩 순회하면서 콜백함수 실행
+            $("input[name='food']").each(function() {
+                // document.write($(this).is(":checked"));
+                // console.log($(this).is(":checked"));
+                if($(this).is(":checked")) {
                     orderList.push($(this).val());
-                }
+                }                
             });
+
             console.log(orderList);
-        }); 
+        });
     </script>
 </body>
-
 </html>

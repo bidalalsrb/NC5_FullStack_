@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>addClass/removeClass</title>
+    <script src="../js/jquery-3.7.0.min.js"></script>
+    <style>
+        .box {
+            width: 100px;
+            height: 100px;
+            background-color: black;
+        }
+
+        .red {
+            background-color: red;
+        }
+
+        .blue {
+            background-color: blue;
+
+        }
+
+        .green {
+            background-color: green;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="box"></div>
+    <script>
+        let isRed = false;
+        let cnt = 0;
+        const interVal = setInterval(() => {
+            // isRed = !isRed;
+            // if (isRed) {
+            //     $(".box").addClass("red").removeClass("blue");
+
+            //     return;
+            // }
+
+            // $(".box").addClass("blue").removeClass("red");
+
+            // $(".box").addClass("green").removeClass("blue");
+            if (cnt % 3 == 0) {
+                $(".box").addClass("red").removeClass("blue").removeClass("green");
+
+            } else if (cnt % 3 == 1) {
+                $(".box").addClass("blue").removeClass("red").removeClass("green");
+
+            } else {
+                $(".box").addClass("green").removeClass("blue").removeClass("red");
+
+            }
+            cnt++;
+
+
+        }, 1000);
+    </script>
+</body>
+
+</html>
