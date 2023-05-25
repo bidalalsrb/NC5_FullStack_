@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>animate</title>
+    <script src="js/jquery-3.7.0.min.js"></script>
+    <style>
+        div {
+            width: 100px;
+            height: 100px;
+            margin: 10px;
+        }
+
+        #box1 {
+            background-color: blue;
+        }
+
+        #box2 {
+            background-color: green;
+        }
+
+        #box3 {
+            background-color: red;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="box1"></div>
+    <div id="box2"></div>
+    <div id="box3"></div>
+    <script>
+        $("#box1").animate({
+            width: "200px",
+            height: "200px"
+
+        }, 3000, () => {
+            console.log("확대완료");
+        })
+
+        // 두 개 이상의 animate메소드를 체이닝기법으로 붙일 수 있고 순서대로 실행
+        $("#box2").animate({
+            "background" : "#f90"
+        },1000,()=>{
+            console.log("배경색 오렌지");
+        }).animate({
+            "background-color" : "blue"
+        },1000,()=>{
+            console.log("배경색 블루");
+        })
+        
+        // marginleft로 box3을 250px 이동했따 100px 로 돌아와
+        $("#box3").animate({
+            marginLeft : "250px"
+        },2000,()=>{
+            console.log("배경색 오렌지");
+        }).animate({
+            marginLeft : "100px"
+        },1000,()=>{
+            console.log("배경색 블루");
+        })
+        </script>
+</body>
+
+</html>
