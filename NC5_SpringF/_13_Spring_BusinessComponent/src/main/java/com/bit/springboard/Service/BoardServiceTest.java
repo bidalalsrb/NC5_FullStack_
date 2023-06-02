@@ -22,34 +22,34 @@ public class BoardServiceTest {
 		//		글 등록 
 		boardDTO.setBOARD_TITLE("test 제목");
 		boardDTO.setBOARD_CONTENT("test 내용");
-		boardDTO.setBOARD_WRITER("관리자");
+		boardDTO.setBOARD_WRITER("사용자");
 
-		//		boardService.insertBoard(boardDTO);
+				boardService.insertBoard(boardDTO);
 		//		boardService.getBoard(1);
 
 		//		글 수정 테스트
-		BoardDTO updateBoard = new BoardDTO();
-		updateBoard.setBOARD_NO(1);
-		updateBoard.setBOARD_TITLE("update 제목");
-		updateBoard.setBOARD_CONTENT("update 내용");
-
-		//		boardService.updateBoard(updateBoard);
-
-		//		글 삭제 테스트
-
-		boardService.deleteBoard(2);
-
-		//	4. 글 상세 조회 테스트
-		//		BoardDTO returnBoard = boardService.getBoard(1);
-		//		System.out.println(returnBoard);
-		
-//		글 목록 조회
-		List<BoardDTO> boardList = boardService.getBoardList();
-		for (BoardDTO board : boardList) {
-			System.out.println(board);
-		}
-		
-		//	5. 스프링 컨테이너 종료
+//		BoardDTO updateBoard = new BoardDTO();
+//		updateBoard.setBOARD_NO(1);
+//		updateBoard.setBOARD_TITLE("update 제목");
+//		updateBoard.setBOARD_CONTENT("update 내용");
+//
+//		//		boardService.updateBoard(updateBoard);
+//
+//		//		글 삭제 테스트
+//
+//		boardService.deleteBoard(2);
+//
+//		//	4. 글 상세 조회 테스트
+//		//		BoardDTO returnBoard = boardService.getBoard(1);
+//		//		System.out.println(returnBoard);
+//		
+////		글 목록 조회
+//		List<BoardDTO> boardList = boardService.getBoardList();
+//		for (BoardDTO board : boardList) {
+//			System.out.println(board);
+//		}
+//		
+//		//	5. 스프링 컨테이너 종료
 		factory.close();
 
 	}
