@@ -12,6 +12,7 @@ public interface BoardService {
 	void updateBoard(BoardDTO boardDTO);
 	
 //	글 삭제
+//	JPa해야해
 	void deleteBoard(int boardNo);
 	
 //	글 상세 조회

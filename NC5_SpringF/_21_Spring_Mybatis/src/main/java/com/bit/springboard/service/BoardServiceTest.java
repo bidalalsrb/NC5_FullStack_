@@ -37,7 +37,7 @@ public class BoardServiceTest {
 
 		//		글 삭제 테스트
 
-		//		boardService.deleteBoard(3);
+				boardService.deleteBoard(4);
 
 //		//	4. 글 상세 조회 테스트
 //		BoardDTO returnBoard = boardService.getBoard(1);
