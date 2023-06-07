@@ -6,15 +6,53 @@
 
 <mapper namespace="BoardDAO">
 	<insert id="insertBoard" parameterType="board">
-	INSERT INTO T_BOARD(
-		BOARD_TITLE, 
-		BOARD_CONTENT,
-		BOARD_WRITER
-	) VALUES (
-		#{BOARD_TITLE},
-		#{BOARD_CONTENT},
-		#{BOARD_WRITER}		
-	)
+		INSERT INTO T_BOARD(
+			BOARD_TITLE,
+			BOARD_CONTENT,
+			BOARD_WRITER
+		) VALUES (
+			#{BOARD_TITLE},
+			#{BOARD_CONTENT},
+			#{BOARD_WRITER}
+		)
 
 	</insert>
+
+	<update id="updateBoard" parameterType="board">
+		UPDATE T_BOARD
+		SET
+			BOARD_TITLE = #{BOARD_TITLE},
+			BOARD_CONTENT = #{BOARD_CONTENT}
+		WHERE BOARD_NO = #{BOARD_NO}
+	</update>
+	
+	<delete id="deleteBoard" parameterType="int">
+	DELETE
+		FROM T_BOARD
+		WHERE BOARD_NO = #{boardNo}
+	</delete>
+	 
+	 <select id="getBoard" parameterType="int" resultType="board">
+	 SELECT BOARD_NO
+		 ,	BOARD_TITLE
+		 ,	BOARD_CONTENT
+		 ,	BOARD_WRITER
+		 ,	BOARD_REGDATE
+		 ,	BOARD_CNT
+	 FROM T_BOARD
+	 WHERE BOARD_NO = #{boardNo}
+	 </select>
+	
+	<select id="getBoardList" resultType="board">
+	SELECT BOARD_NO
+		 ,	BOARD_TITLE
+		 ,	BOARD_CONTENT
+		 ,	BOARD_WRITER
+		 ,	BOARD_REGDATE
+		 ,	BOARD_CNT
+	 FROM T_BOARD
+	
+	</select>
+	
+	
 </mapper>

@@ -65,7 +65,7 @@ public class BoardDAO {
 	//	글 수정
 	public void updateBoard(BoardDTO boardDTO) {
 		System.out.println("업데이트 실행");
-
+		mybatis.update("BoardDAO.updateBoard",boardDTO);
 
 	}
 
@@ -73,19 +73,19 @@ public class BoardDAO {
 	public void deleteBoard(int boardNo) {
 		System.out.println("딜리트 실행");
 
-
+		mybatis.delete("BoardDAO.deleteBoard",boardNo);
 	}
 
 	//	글 상세 조회
 	public BoardDTO getBoard(int boardNO) {
 		System.out.println("getBoard 실행");
-		return null;
+		return mybatis.selectOne("BoardDAO.getBoard",boardNO);
 	}
 
 	//	글 목록 조회
 	public List<BoardDTO> getBoardList() {
 		System.out.println("겟보드리스트 실행");
 
-		return null;
+		return mybatis.selectList("BoardDAO.getBoardList");
 	}
 }
