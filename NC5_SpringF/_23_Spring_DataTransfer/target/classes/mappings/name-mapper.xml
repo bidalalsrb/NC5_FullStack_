@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="NameDAO">
+	<insert id="insertName" parameterType="name">
+		INSERT INTO T_NAME(
+			NAME,
+			TEL
+		) VALUES (
+			#{name},
+			#{tel}
+		)
+	</insert>
+	<select id="getNameList" resultType="name">
+		SELECT *
+			FROM T_NAME
+	</select>
+
+
+
+
+
+
+
+
+
+
+
+</mapper>
