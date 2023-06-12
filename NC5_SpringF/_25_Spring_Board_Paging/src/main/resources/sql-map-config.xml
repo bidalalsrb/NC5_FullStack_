@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+	PUBLIC "-//mybatis.org//DTD config 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+	<!-- 쿼리의 결과 컬럼이름을 카멜케이스로 변경 -->
+	<settings>
+		<setting name="mapUnderscoreToCamelCase" value="true"></setting>
+	</settings>
+	
+	<!-- 객체들의 별칭 지정 -->
+	<!-- 객체들의 별칭을 지정하지 않으면 parameterType이나 resultType에 패키지가 포함된
+	클래스를 지정해줘야되는데 별칭 생성 시 별칭으로만 지정가능 -->
+	<typeAliases>
+		<typeAlias type="com.bit.springboard.dto.BoardDTO" 
+					alias="board"/>
+		<typeAlias type="com.bit.springboard.dto.UserDTO"
+					alias="user"/>
+	</typeAliases>
+	
+	<!-- 사용할 SQL 매퍼의 위치 지정 -->
+	<mappers>
+		<mapper resource="mappings/board-mapper.xml"></mapper>
+		<mapper resource="mappings/user-mapper.xml"></mapper>
+	</mappers>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+</configuration>

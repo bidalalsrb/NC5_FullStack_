@@ -47,6 +47,7 @@
 	</select>
 	
 	<select id="getBoardList"
+	parameterType="map"
 	resultType="board">
 		SELECT BOARD_NO
 			 , BOARD_TITLE
@@ -55,7 +56,34 @@
 			 , BOARD_REGDATE
 			 , BOARD_CNT
 			FROM T_BOARD
+			<if test="searchKeyword != null and searchKeyword != '' ">
+				<if test="searchKeyCondition == 'all'">
+					WHERE 1=0
+						OR BOARD_TITLE LIKE CONCAT('%',#{searchKeyword},'%')
+						OR BOARD_CONTENT LIKE CONCAT('%',#{searchKeyword},'%')
+						OR BOARD_WRITER LIKE CONCAT('%',#{searchKeyword},'%')
+				</if>
+				<if test="searchCondition != 'all'">
+					WHERE 1=1
+					<if test="searchKeyCondition == 'title'">
+						AND BOARD_TITLE LIKE CONCAT('%',#{searchKeyword},'%')
+					</if>
+					<if test="searchKeyCondition == 'content'">
+						AND BOARD_CONTENT LIKE CONCAT('%',#{searchKeyword},'%')
+					</if>
+					<if test="searchKeyCondition == 'writer'">
+						AND BOARD_WRITER LIKE CONCAT('%',#{searchKeyword},'%')
+					</if>
+				</if>
+			</if>
 	</select>
+	
+	<update id="updateBoardCnt" parameterType="int">
+		UPDATE T_BOARD
+			SET BOARD_CNT = BOARD_CNT + 1
+		WHERE BOARD_NO = #{boardNo}
+			
+	</update>
 	
 	
 	

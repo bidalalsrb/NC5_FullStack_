@@ -1,6 +1,7 @@
 package com.bit.springboard.service.board.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -48,9 +49,16 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
-	public List<BoardDTO> getBoardList() {
+	public List<BoardDTO> getBoardList(Map<String, String> paramMap) {
 		// TODO Auto-generated method stub
-		return boardDAO.getBoardList();
+		return boardDAO.getBoardList(paramMap);
 	}
+
+	@Override
+	public void updateBoardCnt(int boardNo) {
+		// TODO Auto-generated method stub
+		boardDAO.updateBoardCnt(boardNo);
+	}
+
 
 }

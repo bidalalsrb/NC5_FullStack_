@@ -1,6 +1,7 @@
 package com.bit.springboard.service.board.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,45 +17,51 @@ import com.bit.springboard.dto.BoardDTO;
 public class BoardDAO {
 	@Autowired
 	private SqlSessionTemplate mybatis;
-	
+
 	//글 등록
 	public void insertBoard(BoardDTO boardDTO) {
 		System.out.println("insertBoard 실행");
-		
+
 		mybatis.insert("BoardDAO.insertBoard", boardDTO);
 	}
-	
+
 	//글 수정
 	public void updateBoard(BoardDTO boardDTO) {
 		System.out.println("updateBoard 실행");
-		
+
 		mybatis.update("BoardDAO.updateBoard", boardDTO);
 	}
-	
+
 	//글 삭제
 	public void deleteBoard(int boardNo) {
 		System.out.println("deleteBoard 실행");
-		
+
 		mybatis.delete("BoardDAO.deleteBoard", boardNo);
 	}
-	
+
 	//글 상세 조회
 	public BoardDTO getBoard(int boardNo) {
 		System.out.println("getBoard 실행");
-		
+
 		return mybatis.selectOne("BoardDAO.getBoard", boardNo);
 	}
-	
+
 	//글 목록 조회
-	public List<BoardDTO> getBoardList() {
+	public List<BoardDTO> getBoardList(Map<String,String> paramMap) {
 		System.out.println("getBoardList 실행");
-		
-		return mybatis.selectList("BoardDAO.getBoardList");
+
+		return mybatis.selectList("BoardDAO.getBoardList",paramMap);
 	}
-	
-	
-	
-	
-	
-	
+
+	//	조회수 올리기
+	public void updateBoardCnt(int boardNo) {
+		// TODO Auto-generated method stub
+		mybatis.update("BoardDAO.updateBoardCnt",boardNo);
+	}
+
+
+
+
+
+
 }
