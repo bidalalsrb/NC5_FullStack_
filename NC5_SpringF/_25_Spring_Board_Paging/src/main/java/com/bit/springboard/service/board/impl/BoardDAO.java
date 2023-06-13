@@ -57,6 +57,7 @@ public class BoardDAO {
 							new HashMap<String, Object>();
 		
 		sqlParamMap.put("search", paramMap);
+		cri.setStartNum((cri.getPageNum()-1 ) * cri.getAmount());
 		sqlParamMap.put("page", cri);
 		
 		return mybatis.selectList("BoardDAO.getBoardList", sqlParamMap);

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans
+	xmlns="http://www.springframework.org/schema/mvc"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
+
+	<!-- DispatcherServlet Context: defines this servlet's request-processing 
+		infrastructure -->
+
+	<!-- Enables the Spring MVC @Controller programming model -->
+	<annotation-driven />
+
+	<!-- Handles HTTP GET requests for /resources/** by efficiently serving 
+		up static resources in the ${webappRoot}/resources directory -->
+	<!-- resources엘리먼트 : css, image, js, html 등 정적파일들의 위치를 매핑해주는 설정 -->
+	<resources mapping="/resources/**" location="/resources/" />
+	<resources mapping="/js/**" location="/js/" />
+	<resources mapping="/css/**" location="/css/" />
+	<resources location="/upload/" mapping="/upload/**"></resources>
+	<resources mapping="/images/**" location="/images/"></resources>
+
+	<!-- ViewResolver: 화면을 찾아주는 객체 Controller 메소드에서 리턴타입이 String일 때만 동작 prefix: 
+		접두사로서 Controller 메소드에서 String이 리턴됐을 때 리턴된 String 앞에 붙여줄 내용을 설정할 수 있다. suffix: 
+		접미사로서 Controller 메소드에서 String이 리턴됐을 때 리턴된 String 뒤에 붙여줄 내용을 설정할 수 있다. Controller 
+		메소드에서 "index"를 리턴하면 "/WEB-INF/views/index.jsp" -->
+	<!-- Resolves views selected for rendering by @Controllers to .jsp resources 
+		in the /WEB-INF/views directory -->
+	<beans:bean
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<beans:property name="prefix" value="/WEB-INF/views/" />
+		<beans:property name="suffix" value=".jsp" />
+	</beans:bean>
+
+	<!-- Controller 객체는 요청이 올때마다 생성돼서 사용되는데 Model객체들이 미리 생성되어 있지 않으면 Controller에서 
+		Model객체들을 호출해서 사용할 수 없기 때문에 Model 객체는 어플리케이션이 동작하면서 생성될 수 있게 root-context.xml 
+		파일에서 생성 Controller는 servlet-context.xml 파일에서 생성 -->
+	<context:component-scan
+		base-package="com.bit.springboard.controller" />
+
+
+	<!-- 파일이나 다양한 종류의 multipart 형식의 데이터가 전송될 때 처리해주는 객체 -->
+	<!-- 파일업로드 시 업로드되는 파일들은 모두 multipart 형식으로 전송 -->
+	<beans:bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<!-- 최대 업로드 크기 -->
+		<beans:property name="maxUploadSize" value="10000000"></beans:property>
+		<!-- 인코딩설정 -->
+		<beans:property name="defaultEncoding" value="UTF-8"></beans:property>
+	</beans:bean>
+
+
+
+
+
+
+
+
+
+</beans:beans>

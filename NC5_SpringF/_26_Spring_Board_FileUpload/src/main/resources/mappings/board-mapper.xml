@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="BoardDAO">
+	<insert id="insertBoard"
+	parameterType="board">
+	<selectKey resultType="int" keyProperty="boardNo" order="BEFORE">
+		SELECT IFNULL(MAX(BOARD_NO),0) +1 FROM T_BOARD
+	</selectKey>
+		INSERT INTO T_BOARD(
+			BOARD_TITLE,
+			BOARD_CONTENT,
+			BOARD_WRITER
+		) VALUES (
+			#{boardTitle},
+			#{boardContent},
+			#{boardWriter}
+		)
+	</insert>
+	
+	<update id="updateBoard"
+	parameterType="board">
+		UPDATE T_BOARD
+			SET
+				BOARD_TITLE = #{boardTitle},
+				BOARD_CONTENT = #{boardContent}
+			WHERE BOARD_NO = #{boardNo}
+	</update>
+	
+	<delete id="deleteBoard"
+	parameterType="int">
+		DELETE 
+			FROM T_BOARD
+			WHERE BOARD_NO = #{boardNo}
+	</delete>
+	
+	<select id="getBoard"
+	parameterType="int"
+	resultType="board">
+		SELECT BOARD_NO
+			 , BOARD_TITLE
+			 , BOARD_CONTENT
+			 , BOARD_WRITER
+			 , BOARD_REGDATE
+			 , BOARD_CNT
+			FROM T_BOARD
+			WHERE BOARD_NO = #{boardNo}
+	</select>
+	
+	<select id="getBoardList"
+	parameterType="map"
+	resultType="board">
+		SELECT BOARD_NO
+			 , BOARD_TITLE
+			 , BOARD_CONTENT
+			 , BOARD_WRITER
+			 , BOARD_REGDATE
+			 , BOARD_CNT
+			FROM T_BOARD
+			<if test="search.searchKeyword != null and search.searchKeyword != ''">
+				<if test="search.searchCondition == 'all'">
+					WHERE 1=0
+						OR BOARD_TITLE LIKE CONCAT('%', #{search.searchKeyword}, '%')
+						OR BOARD_CONTENT LIKE CONCAT('%', #{search.searchKeyword}, '%')
+						OR BOARD_WRITER LIKE CONCAT('%', #{search.searchKeyword}, '%')
+				</if>
+				<if test="search.searchCondition != 'all'">
+					WHERE 1=1
+					<if test="search.searchCondition == 'title'">
+						AND BOARD_TITLE LIKE CONCAT('%', #{search.searchKeyword}, '%')
+					</if>
+					<if test="search.searchCondition == 'content'">
+						AND BOARD_CONTENT LIKE CONCAT('%', #{search.searchKeyword}, '%')
+					</if>
+					<if test="search.searchCondition == 'writer'">
+						AND BOARD_WRITER LIKE CONCAT('%', #{search.searchKeyword}, '%')
+					</if>
+				</if>
+			</if>
+			LIMIT #{page.amount} OFFSET #{page.startNum}
+	</select>
+	
+	<update id="updateBoardCnt"
+	parameterType="int">
+		UPDATE T_BOARD
+			SET BOARD_CNT = BOARD_CNT + 1
+			WHERE BOARD_NO = #{boardNo}
+	</update>
+	
+	<select id="getBoardTotal"
+	parameterType="map"
+	resultType="int">
+		SELECT COUNT(*)
+			FROM T_BOARD
+			<if test="searchKeyword != null and searchKeyword != ''">
+				<if test="searchCondition == 'all'">
+					WHERE 1=0
+						OR BOARD_TITLE LIKE CONCAT('%', #{searchKeyword}, '%')
+						OR BOARD_CONTENT LIKE CONCAT('%', #{searchKeyword}, '%')
+						OR BOARD_WRITER LIKE CONCAT('%', #{searchKeyword}, '%')
+				</if>
+				<if test="searchCondition != 'all'">
+					WHERE 1=1
+					<if test="searchCondition == 'title'">
+						AND BOARD_TITLE LIKE CONCAT('%', #{searchKeyword}, '%')
+					</if>
+					<if test="searchCondition == 'content'">
+						AND BOARD_CONTENT LIKE CONCAT('%', #{searchKeyword}, '%')
+					</if>
+					<if test="searchCondition == 'writer'">
+						AND BOARD_WRITER LIKE CONCAT('%', #{searchKeyword}, '%')
+					</if>
+				</if>
+			</if>
+	</select>
+	
+	
+	<insert id="insertBoardFile" parameterType="boardFile">
+		INSERT INTO T_BOARD_FILE (
+			BOARD_NO,
+			BOARD_FILE_NO,
+			BOARD_FILE_NAME,
+			BOARD_FILE_PATH,
+			BOARD_FILE_ORIGIN
+		)VALUES (
+			#{boardNo},
+			(
+				SELECT IFNULL(MAX(A.BOARD_FILE_NO),0) +1
+					FROM T_BOARD_FILE A
+					WHERE A.BOARD_NO = #{boardNo}
+			),
+			#{boardFileName},
+			#{boardFilePath},
+			#{boardFileOrigin}
+		)
+	</insert>
+	
+	<select id="getBoardFileList" parameterType="int" resultType="boardFile">
+	<!-- <[CDATA[]]>: <,> 엘리먼트로 읽히지 않고 부등호로 읽게 해준다. -->
+	<![CDATA[
+		SELECT BOARD_NO
+				,BOARD_FILE_NO
+				,BOARD_FILE_NAME
+				,BOARD_FILE_PATH
+				,BOARD_FILE_ORIGIN
+			FROM T_BOARD_FILE
+			WHERE BOARD_NO = #{boardNo}
+	]]>
+
+	</select>
+	
+	<select id="getBoardFile" parameterType="boardFile" resultType="boardFile">
+		SELECT BOARD_NO
+				,BOARD_FILE_NO
+				,BOARD_FILE_NAME
+				,BOARD_FILE_PATH
+				,BOARD_FILE_ORIGIN
+			FROM T_BOARD_FILE
+			WHERE BOARD_NO = #{boardNo}
+				AND BOARD_FILE_NO = #{boardFileNo}
+	</select>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+</mapper>
