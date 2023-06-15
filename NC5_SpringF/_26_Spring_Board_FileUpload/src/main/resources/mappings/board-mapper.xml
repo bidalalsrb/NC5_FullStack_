@@ -6,9 +6,9 @@
 <mapper namespace="BoardDAO">
 	<insert id="insertBoard"
 	parameterType="board">
-	<selectKey resultType="int" keyProperty="boardNo" order="BEFORE">
-		SELECT IFNULL(MAX(BOARD_NO),0) +1 FROM T_BOARD
-	</selectKey>
+		<selectKey resultType="int" keyProperty="boardNo" order="AFTER">
+			SELECT IFNULL(MAX(BOARD_NO), 0) FROM T_BOARD
+		</selectKey>
 		INSERT INTO T_BOARD(
 			BOARD_TITLE,
 			BOARD_CONTENT,
@@ -116,51 +116,84 @@
 			</if>
 	</select>
 	
-	
-	<insert id="insertBoardFile" parameterType="boardFile">
+	<insert id="insertBoardFile"
+	parameterType="boardFile">
 		INSERT INTO T_BOARD_FILE (
 			BOARD_NO,
 			BOARD_FILE_NO,
 			BOARD_FILE_NAME,
 			BOARD_FILE_PATH,
-			BOARD_FILE_ORIGIN
-		)VALUES (
+			BOARD_FILE_ORIGIN,
+			BOARD_FILE_CATE
+		) VALUES (
 			#{boardNo},
 			(
-				SELECT IFNULL(MAX(A.BOARD_FILE_NO),0) +1
+				SELECT IFNULL(MAX(A.BOARD_FILE_NO), 0) + 1
 					FROM T_BOARD_FILE A
 					WHERE A.BOARD_NO = #{boardNo}
 			),
 			#{boardFileName},
 			#{boardFilePath},
-			#{boardFileOrigin}
+			#{boardFileOrigin},
+			#{boardFileCate}
 		)
 	</insert>
 	
-	<select id="getBoardFileList" parameterType="int" resultType="boardFile">
-	<!-- <[CDATA[]]>: <,> 엘리먼트로 읽히지 않고 부등호로 읽게 해준다. -->
+	<select id="getBoardFileList" 
+	parameterType="int"
+	resultType="boardFile">
+	<!-- <![CDATA[]]>: <, > 엘리먼트로 읽히지 않고 부등호로 읽게 해준다. -->
 	<![CDATA[
 		SELECT BOARD_NO
-				,BOARD_FILE_NO
-				,BOARD_FILE_NAME
-				,BOARD_FILE_PATH
-				,BOARD_FILE_ORIGIN
+			 , BOARD_FILE_NO
+			 , BOARD_FILE_NAME
+			 , BOARD_FILE_PATH
+			 , BOARD_FILE_ORIGIN
+			 , BOARD_FILE_CATE
 			FROM T_BOARD_FILE
 			WHERE BOARD_NO = #{boardNo}
 	]]>
-
 	</select>
 	
-	<select id="getBoardFile" parameterType="boardFile" resultType="boardFile">
+	<select id="getBoardFile"
+	parameterType="boardFile"
+	resultType="boardFile">
+	<![CDATA[
 		SELECT BOARD_NO
-				,BOARD_FILE_NO
-				,BOARD_FILE_NAME
-				,BOARD_FILE_PATH
-				,BOARD_FILE_ORIGIN
+			 , BOARD_FILE_NO
+			 , BOARD_FILE_NAME
+			 , BOARD_FILE_PATH
+			 , BOARD_FILE_ORIGIN
+			 , BOARD_FILE_CATE
 			FROM T_BOARD_FILE
 			WHERE BOARD_NO = #{boardNo}
-				AND BOARD_FILE_NO = #{boardFileNo}
+			  AND BOARD_FILE_NO = #{boardFileNo}
+	]]>
 	</select>
+	
+	<update id="updateBoardFile">
+		UPDATE T_BOARD_FILE
+			SET BOARD_FILE_NAME = #{boardFileName},
+				BOARD_FILE_ORIGIN = #{boardFileOrigin},
+				BOARD_FILE_PATH = #{boardFilePath},
+				BOARD_FILE_CATE = #{boardFileCate}
+			WHERE BOARD_NO = #{boardNo}
+			  AND BOARD_FILE_NO = #{boardFileNo}
+	</update>
+	
+	<delete id="deleteBoardFile">
+		DELETE 
+			FROM T_BOARD_FILE
+			WHERE BOARD_NO = #{boardNo}
+			  AND BOARD_FILE_NO = #{boardFileNo}
+	</delete>
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	

@@ -13,7 +13,7 @@ public interface BoardService {
 	void insertBoard(BoardDTO boardDTO, List<BoardFileDTO> boardFileList);
 	
 	//글수정
-	void updateBoard(BoardDTO boardDTO);
+	void updateBoard(BoardDTO boardDTO, List<BoardFileDTO> uFileList);
 	
 	//글삭제
 	void deleteBoard(int boardNo);

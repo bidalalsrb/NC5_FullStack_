@@ -22,25 +22,38 @@ public class BoardDAO {
 	private SqlSessionTemplate mybatis;
 	
 	//글 등록
-	public void insertBoard(BoardDTO boardDTO,List<BoardFileDTO> boardFileList) {
+	public void insertBoard(BoardDTO boardDTO, List<BoardFileDTO> boardFileList) {
 		System.out.println("insertBoard 실행");
 		
 		mybatis.insert("BoardDAO.insertBoard", boardDTO);
 		
 		for(BoardFileDTO boardFileDTO : boardFileList) {
-			//매퍼에서 selectKey로 꺼내온 boardNo 세      
-			boardFileDTO.setBoardNO(boardDTO.getBoardNo());
-			//List 매퍼로 보낼 때는 하나씩 꺼내서 보내도 되고
-			mybatis.insert("BoardDAO.insertBoardFile",boardFileDTO);
+			//매퍼에서 selectKey로 꺼내온 boardNo 세팅
+			boardFileDTO.setBoardNo(boardDTO.getBoardNo());
+			//List 매퍼로 보낼때는 하나씩 꺼내서 보내도 되고
+			mybatis.insert("BoardDAO.insertBoardFile", boardFileDTO);
 		}
-		//List자체를 매퍼로 보낼 수도 있다.
+		//List자체를 매퍼로 보낼수도 있다.
 	}
 	
 	//글 수정
-	public void updateBoard(BoardDTO boardDTO) {
+	public void updateBoard(BoardDTO boardDTO, 
+			List<BoardFileDTO> uFileList) {
 		System.out.println("updateBoard 실행");
 		
 		mybatis.update("BoardDAO.updateBoard", boardDTO);
+		
+		if(uFileList.size() > 0) {
+			for(int i = 0; i < uFileList.size(); i++) {
+				if(uFileList.get(i).getBoardFileStatus().equals("U")) {
+					mybatis.update("BoardDAO.updateBoardFile", uFileList.get(i));
+				} else if(uFileList.get(i).getBoardFileStatus().equals("D")) {
+					mybatis.delete("BoardDAO.deleteBoardFile", uFileList.get(i));
+				} else if(uFileList.get(i).getBoardFileStatus().equals("I")) {
+					mybatis.insert("BoardDAO.insertBoardFile", uFileList.get(i));
+				}
+			}
+		}
 	}
 	
 	//글 삭제
@@ -66,7 +79,9 @@ public class BoardDAO {
 							new HashMap<String, Object>();
 		
 		sqlParamMap.put("search", paramMap);
-		cri.setStartNum((cri.getPageNum()-1 ) * cri.getAmount());
+		
+		cri.setStartNum((cri.getPageNum() -1) * cri.getAmount());
+		
 		sqlParamMap.put("page", cri);
 		
 		return mybatis.selectList("BoardDAO.getBoardList", sqlParamMap);
@@ -83,16 +98,17 @@ public class BoardDAO {
 		return mybatis.selectOne("BoardDAO.getBoardTotal", paramMap);
 	}
 
-	public List<BoardFileDTO> getboardFileList(int boardNo) {
+	public List<BoardFileDTO> getBoardFileList(int boardNo) {
 		// TODO Auto-generated method stub
-		return mybatis.selectList("BoardDAO.getBoardFileList",boardNo);
+		return mybatis.selectList("BoardDAO.getBoardFileList", boardNo);
 	}
 
-	public BoardFileDTO getboardFile(BoardFileDTO boardFileDTO) {
+	public BoardFileDTO getBoardFile(BoardFileDTO boardFileDTO) {
 		// TODO Auto-generated method stub
 		return mybatis.selectOne("BoardDAO.getBoardFile", boardFileDTO);
 	}
-
+	
+	
 	
 	
 	

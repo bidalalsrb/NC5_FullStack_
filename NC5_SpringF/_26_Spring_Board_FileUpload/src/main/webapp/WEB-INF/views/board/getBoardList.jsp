@@ -24,8 +24,8 @@
 	<div style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
 		<h3>게시글 목록</h3>
 		<form id="searchForm" action="/board/getBoardList.do" method="post">
-		<input type="hidden" name="pageNum" id="pageNum" value="${pageDTO.cri.pageNum }">
-		<input type="hidden" name="amount" id="amount" value="${pageDTO.cri.amount }">
+			<input type="hidden" name="pageNum" id="pageNum" value="${pageDTO.cri.pageNum }">
+			<input type="hidden" name="amount" id="amount" value="${pageDTO.cri.amount }">
 			<table border="1" style="width: 700px; border-collapse: collapse;">
 				<tr>
 					<td align="right">
@@ -113,21 +113,38 @@
 	</div>
 	<jsp:include page="${pageContext.request.contextPath }/footer.jsp"></jsp:include>
 	<script>
-	$(function(){
-		//페이지 번호, 이전, 다음 클릭 시
-		$(".pagination a").on("click",function(e){
-			e.preventDefault();
+		$(function() {
+			//페이지 번호, 이전, 다음 클릭 시
+			$(".pagination a").on("click", function(e) {
+				e.preventDefault();
+				
+				$("#pageNum").val($(this).attr("href"));
+				$("#searchForm").submit();
+			});
+		});
+		
+		$("#btnSearch").on("click", () => {
+			$("#pageNum").val(1);
 			
-			$("#pageNum").val($(this).attr("href"));
 			$("#searchForm").submit();
 		});
-	});
-
-	$("btnSearch").on("click",()=>{
-		$("#pageNum").val(1);
-		$("#searchForm").submit();
-	})
-	
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 	</script>
 </body>
 </html>

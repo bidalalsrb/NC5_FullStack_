@@ -29,13 +29,14 @@ public class BoardServiceImpl implements BoardService {
 //			throw new IllegalArgumentException("게시글 번호로 0은 입력할 수 없습니다.");
 //		}
 		
-		boardDAO.insertBoard(boardDTO,boardFileList);
+		boardDAO.insertBoard(boardDTO, boardFileList);
 	}
 
 	@Override
-	public void updateBoard(BoardDTO boardDTO) {
+	public void updateBoard(BoardDTO boardDTO,
+			List<BoardFileDTO> uFileList) {
 		// TODO Auto-generated method stub
-		boardDAO.updateBoard(boardDTO);
+		boardDAO.updateBoard(boardDTO, uFileList);
 	}
 
 	@Override
@@ -72,13 +73,13 @@ public class BoardServiceImpl implements BoardService {
 	@Override
 	public List<BoardFileDTO> getBoardFileList(int boardNo) {
 		// TODO Auto-generated method stub
-		return boardDAO.getboardFileList(boardNo);
+		return boardDAO.getBoardFileList(boardNo);
 	}
 
 	@Override
 	public BoardFileDTO getBoardFile(BoardFileDTO boardFileDTO) {
 		// TODO Auto-generated method stub
-		return boardDAO.getboardFile(boardFileDTO);
+		return boardDAO.getBoardFile(boardFileDTO);
 	}
 	
 	
