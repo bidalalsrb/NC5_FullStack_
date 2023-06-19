@@ -1,3 +1,274 @@
+POST http://localhost:9090/api/board
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 86
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "boardTitle" : "hello",
+  "boardContent": "ㅁㅁ",
+  "boardWriter": "ㅁㅁㅁ"
+}
+
+<> 2023-06-19T101705.500.json
+
+###
+
+POST http://localhost:9090/api/board
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 86
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "boardTitle" : "hello",
+  "boardContent": "ㅁㅁ",
+  "boardWriter": "ㅁㅁㅁ"
+}
+
+<> 2023-06-19T101610.500.json
+
+###
+
+POST http://localhost:9090/api/board
+Content-Type: application/json
+Content-Length: 86
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "boardTitle" : "hello",
+  "boardContent": "ㅁㅁ",
+  "boardWriter": "ㅁㅁㅁ"
+}
+
+<> 2023-06-19T101353.500.json
+
+###
+
+POST http://localhost:9090/api/board
+Content-Type: application/json
+Content-Length: 60
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "boardContent": "ㅁㅁ",
+  "boardWriter": "ㅁㅁㅁ"
+}
+
+<> 2023-06-19T101339.500.json
+
+###
+
+PUT http://localhost:9090/api/board/1
+Content-Type: application/json
+Content-Length: 52
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "boardTitle": "gello",
+  "boardContent": "das"
+}
+
+<> 2023-06-19T101332.404.json
+
+###
+
+PUT http://localhost:9090/api/board=1
+Content-Type: application/json
+Content-Length: 52
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "boardTitle": "gello",
+  "boardContent": "das"
+}
+
+<> 2023-06-19T101326.404.json
+
+###
+
+PUT http://localhost:9090/api/board?1=
+Content-Type: application/json
+Content-Length: 52
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "boardTitle": "gello",
+  "boardContent": "das"
+}
+
+###
+
+PUT http://localhost:9090/api/board
+Content-Type: application/json
+Content-Length: 68
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "boardNo": 1,
+  "boardTitle": "gello",
+  "boardContent": "das"
+}
+
+###
+
+PUT http://localhost:9090/api/board
+Content-Type: application/json
+Content-Length: 60
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "boardContent": "ㅁㅁ",
+  "boardWriter": "ㅁㅁㅁ"
+}
+
+###
+
+POST http://localhost:9090/api/board
+Content-Type: application/json
+Content-Length: 60
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "boardContent": "ㅁㅁ",
+  "boardWriter": "ㅁㅁㅁ"
+}
+
+<> 2023-06-19T100840.500.json
+
+###
+
+POST http://localhost:9090/api/board
+Content-Type: application/json
+Content-Length: 86
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "boardTitle": "나나",
+  "boardContent": "ㅁㅁ",
+  "boardWriter": "ㅁㅁㅁ"
+}
+
+<> 2023-06-19T100752.500.json
+
+###
+
+GET http://localhost:9090/api/board
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2023-06-19T100733.500.json
+
+###
+
+POST http://localhost:9090/api/board
+Content-Type: application/json
+Content-Length: 86
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "boardTitle": "나나",
+  "boardContent": "ㅁㅁ",
+  "boardWriter": "ㅁㅁㅁ"
+}
+
+<> 2023-06-19T100513.500.json
+
+###
+
+GET http://localhost:9090/api/testApi
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2023-06-19T100438.200.json
+
+###
+
+POST http://localhost:9090/api/board
+Content-Type: application/json
+Content-Length: 62
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "boardTitle": 1,
+  "boardContent": 2,
+  "boardWriter": 3
+}
+
+<> 2023-06-19T100412.500.json
+
+###
+
+POST http://localhost:9090/api/board
+Content-Type: application/json
+Content-Length: 62
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "boardTitle": 1,
+  "boardContent": 2,
+  "boardWriter": 3
+}
+
+<> 2023-06-19T100228.500.json
+
+###
+
+POST http://localhost:9090/api/board
+Content-Type: application/json
+Content-Length: 64
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "board_title": 1,
+  "board_content": 2,
+  "boardWriter": 3
+}
+
+<> 2023-06-19T100156.500.json
+
+###
+
+POST http://localhost:9090/api/board
+Content-Length: 0
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2023-06-19T095624.500.json
+
+###
+
 GET http://localhost:9090/api/testApi
 Connection: Keep-Alive
 User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
