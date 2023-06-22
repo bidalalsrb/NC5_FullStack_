@@ -1,6 +1,5 @@
 package com.bit.springboard.service.Impl;
 
-import com.bit.springboard.dto.BoardDTO;
 import com.bit.springboard.entity.Board;
 import com.bit.springboard.mapper.BoardMapper;
 import com.bit.springboard.repository.BoardRepository;
@@ -14,7 +13,6 @@ import java.util.List;
 public class BoardServiceImpl implements BoardService {
     private BoardMapper boardMapper;
 
-
     private BoardRepository boardRepository;
 
     //생성자 주입
@@ -25,8 +23,11 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public BoardDTO getBoard(int boardNo) {
-        return boardMapper.getBoard(boardNo);
+    public Board getBoard(int boardNo) {
+        if (boardRepository.findById(boardNo).isEmpty()) {
+            return null;
+        }
+        return boardRepository.findById(boardNo).get();
     }
 
     @Override
@@ -35,17 +36,17 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public void insertBoard(BoardDTO boardDTO) {
-        boardMapper.insertBoard(boardDTO);
+    public void insertBoard(Board board) {
+        boardRepository.save(board);
     }
 
     @Override
-    public void updateBoard(BoardDTO boardDTO) {
-        boardMapper.updateBoard(boardDTO);
+    public void updateBoard(Board board) {
+        boardRepository.save(board);
     }
 
     @Override
     public void deleteBoard(int boardNo) {
-        boardMapper.deleteBoard(boardNo);
+        boardRepository.deleteById(boardNo);
     }
 }

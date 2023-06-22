@@ -13,7 +13,7 @@ public class User {
     @GeneratedValue(
             strategy = GenerationType.IDENTITY
     )
-    private Long id;
+    private long id;
     @Column(unique = true)
     private String userId;
     private String userPw;
@@ -21,7 +21,4 @@ public class User {
     private String userEmail;
     private String userTel;
     private LocalDateTime userRegdate = LocalDateTime.now();
-
-
 }
-

@@ -14,13 +14,12 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
 import javax.sql.DataSource;
-import java.util.Properties;
 
 //자바 설정파일로 선언
 @Configuration
-//어떤 설정 파일을 읽을 것인지 지정
+//어떤 설정파일을 읽을 것인지 지정
 @PropertySource("classpath:/application.properties")
-//매퍼 인터페이스 위치 지정
+//매퍼 인터페이스 위치지정
 @MapperScan(basePackages = "com.bit.springboard.mapper")
 public class DataConfiguration {
     @Autowired
@@ -28,7 +27,7 @@ public class DataConfiguration {
     ApplicationContext applicationContext;
 
     @Bean
-    @ConfigurationProperties(prefix = "spring.datasource.hikari")
+    @ConfigurationProperties(prefix="spring.datasource.hikari")
     public HikariConfig hikariConfig() {
         return new HikariConfig();
     }
@@ -38,16 +37,21 @@ public class DataConfiguration {
         DataSource dataSource = new HikariDataSource(hikariConfig());
         return dataSource;
     }
-
-    //mybatis 연동
+    
+    //Mybatis 연동
     @Bean
     public SqlSessionFactory sqlSessionFactory(DataSource dataSource) throws Exception {
-        SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
+        SqlSessionFactoryBean sqlSessionFactoryBean =
+                new SqlSessionFactoryBean();
         sqlSessionFactoryBean.setDataSource(dataSource);
-        sqlSessionFactoryBean.setConfigLocation(applicationContext.getResource("classpath:mybatis-config.xml"));
-        sqlSessionFactoryBean.setMapperLocations(applicationContext.getResources("classpath:mapper/**/**.xml"));
-        return sqlSessionFactoryBean.getObject();
+        sqlSessionFactoryBean.setConfigLocation(
+                applicationContext.getResource("classpath:mybatis-config.xml")
+        );
+        sqlSessionFactoryBean.setMapperLocations(
+                applicationContext.getResources("classpath:mapper/**/**.xml")
+        );
 
+        return sqlSessionFactoryBean.getObject();
     }
 
     @Bean
@@ -55,12 +59,11 @@ public class DataConfiguration {
         return new SqlSessionTemplate(sqlSessionFactory);
     }
 
-    //JPa 연동
-    @Bean
-    @ConfigurationProperties(prefix = "spring.jpa")
-    public Properties hibernateConfig(){
-        return new Properties();
-    }
+
+
+
+
+
 
 
 }
