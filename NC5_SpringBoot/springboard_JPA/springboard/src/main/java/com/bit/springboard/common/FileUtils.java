@@ -1,5 +1,8 @@
 package com.bit.springboard.common;
 
+import com.bit.springboard.entity.BoardFile;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -7,16 +10,12 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
 
-import org.springframework.web.multipart.MultipartFile;
-
-import com.bit.springboard.dto.BoardFileDTO;
-
 public class FileUtils {
 	//MultipartFile 객체를 받아서 DTO형태로 변경 후 리턴
-	public static BoardFileDTO parseFileInfo(MultipartFile file,
-			String attachPath) throws IOException {
+	public static BoardFile parseFileInfo(MultipartFile file,
+										  String attachPath) throws IOException {
 		//리턴할 BoardDTO 객체 생성
-		BoardFileDTO boardFileDTO = new BoardFileDTO();
+		BoardFile boardFile = new BoardFile();
 		
 		String boardFileOrigin = file.getOriginalFilename();
 		
@@ -42,21 +41,21 @@ public class FileUtils {
 		
 		if(type != null) {
 			if(type.startsWith("image")) {
-				boardFileDTO.setBoardFileCate("image");
+				boardFile.setBoardFileCate("image");
 			} else {
-				boardFileDTO.setBoardFileCate("etc");
+				boardFile.setBoardFileCate("etc");
 			}
 		} else {
-			boardFileDTO.setBoardFileCate("etc");
+			boardFile.setBoardFileCate("etc");
 		}
 		
 		//파일 업로드 처리
 		File uploadFile = new File(attachPath + boardFileName);
 		
 		//리턴될 DTO 셋팅
-		boardFileDTO.setBoardFileName(boardFileName);
-		boardFileDTO.setBoardFileOrigin(boardFileOrigin);
-		boardFileDTO.setBoardFilePath(boardFilePath);
+		boardFile.setBoardFileName(boardFileName);
+		boardFile.setBoardFileOrigin(boardFileOrigin);
+		boardFile.setBoardFilePath(boardFilePath);
 		
 		try {
 			file.transferTo(uploadFile);
@@ -68,6 +67,6 @@ public class FileUtils {
 			e.printStackTrace();
 		}
 		
-		return boardFileDTO;
+		return boardFile;
 	}
 }

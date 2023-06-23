@@ -1,7 +1,9 @@
-package com.bit.springboard.service.Impl;
+package com.bit.springboard.service.impl;
 
 import com.bit.springboard.entity.Board;
+import com.bit.springboard.entity.BoardFile;
 import com.bit.springboard.mapper.BoardMapper;
+import com.bit.springboard.repository.BoardFileRepository;
 import com.bit.springboard.repository.BoardRepository;
 import com.bit.springboard.service.BoardService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,18 +17,23 @@ public class BoardServiceImpl implements BoardService {
 
     private BoardRepository boardRepository;
 
+    private BoardFileRepository boardFileRepository;
+
     //생성자 주입
     @Autowired
-    public BoardServiceImpl(BoardMapper boardMapper, BoardRepository boardRepository) {
+    public BoardServiceImpl(BoardMapper boardMapper,
+                            BoardRepository boardRepository,
+                            BoardFileRepository boardFileRepository) {
         this.boardMapper = boardMapper;
         this.boardRepository = boardRepository;
+        this.boardFileRepository = boardFileRepository;
     }
 
     @Override
     public Board getBoard(int boardNo) {
-        if (boardRepository.findById(boardNo).isEmpty()) {
+        if(boardRepository.findById(boardNo).isEmpty())
             return null;
-        }
+
         return boardRepository.findById(boardNo).get();
     }
 
@@ -36,8 +43,19 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public void insertBoard(Board board) {
+    public void insertBoard(Board board, List<BoardFile> uploadFileList) {
         boardRepository.save(board);
+        //변경사항 커밋 후 저징
+        boardRepository.flush();
+
+        for(BoardFile boardFile : uploadFileList) {
+            boardFile.setBoard(board);
+
+            int boardFileNo = boardFileRepository.findMaxFileNo(board.getBoardNo());
+            boardFile.setBoardFileNo(boardFileNo);
+
+            boardFileRepository.save(boardFile);
+        }
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.bit.springboard.service;
 
 import com.bit.springboard.entity.Board;
+import com.bit.springboard.entity.BoardFile;
 
 import java.util.List;
 
@@ -9,7 +10,7 @@ public interface BoardService {
 
     List<Board> getBoardList();
 
-    void insertBoard(Board board);
+    void insertBoard(Board board, List<BoardFile> uploadFileList);
 
     void updateBoard(Board board);
 

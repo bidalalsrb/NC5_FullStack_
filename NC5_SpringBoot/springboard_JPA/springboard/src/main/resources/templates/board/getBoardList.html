@@ -37,14 +37,6 @@
         $("#searchForm").submit();
       });
 
-      $.ajax({
-        url: '/board/insert-board-view',
-        type: 'post',
-        contentType: 'application/x-www-form-urlencoded',
-        data: {
-          'title': value1,
-          key2: value2
-        });
     </script>
   </th:block>
 </head>
@@ -52,7 +44,7 @@
 <div layout:fragment="content">
 <div style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
   <h3>게시글 목록</h3>
-  <form id="searchForm" action="/board/board" method="post">
+  <form id="searchForm" action="/board/getboardList.do" method="post">
     <table border="1" style="width: 700px; border-collapse: collapse;">
       <tr>
         <td align="right">
@@ -82,11 +74,11 @@
       <td th:text="${board.boardNo }"></td>
       <td>
         <a th:text="${board.boardTitle }"
-           th:href="@{/board/updateBoardCnt/{boardNo} (boardNo=${board.boardNo})}">
+           th:href="@{/board/board/{boardNo} (boardNo=${board.boardNo})}">
         </a>
       </td>
       <td th:text="${board.boardWriter }"></td>
-      <td th:text="${board.boardRegdate }"></td>
+      <td th:text="${#strings.substring(board.boardRegdate,0,10)}"></td>
       <td th:text="${board.boardCnt }"></td>
     </tr>
   </table>

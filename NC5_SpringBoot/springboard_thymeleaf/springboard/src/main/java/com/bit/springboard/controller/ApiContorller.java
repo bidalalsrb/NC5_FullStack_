@@ -76,17 +76,9 @@ public class ApiContorller {
     public ResponseEntity<?> updateBoard(BoardDTO boardDTO) {
         ResponseDTO<Map<String, Object>> responseDTO
                 = new ResponseDTO<Map<String, Object>>();
-        try {
             boardService.updateBoard(boardDTO);
-            Map<String, Object> returnMap = new HashMap<String, Object>();
-            returnMap.put("msg", "게시판 항목이 성공적으로 수정되었습니다.");
-            responseDTO.setItem(returnMap);
-            return ResponseEntity.ok().body(responseDTO);
-        } catch (Exception e) {
-            responseDTO.setErrorMessage(e.getMessage());
+            boardService.save(boardDTO);
 
-            return ResponseEntity.badRequest().body(responseDTO);
-        }
     }
 
     //글삭제
