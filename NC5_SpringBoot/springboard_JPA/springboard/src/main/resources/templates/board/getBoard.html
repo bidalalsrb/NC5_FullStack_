@@ -13,7 +13,7 @@
             //변경된 첨부파일 배열
             const changedFiles = [];
 
-            $(function () {
+            $(function() {
                 //세션, 리퀘스트, 모델에 담긴 값을 javascript에서 사용
                 //thymeleaf에서 세션, 리퀘스트, 모델에 담기 값을 사용하려면
                 //script 태그에 th:inline을 선언해줘야 한다.
@@ -28,20 +28,20 @@
                     const fileArr = Array.prototype.slice.call(files);
 
                     //파일 배열에 담긴 파일들 하나씩 꺼내서 미리보기 처리
-                    for (f of fileArr) {
+                    for(f of fileArr) {
                         //미리보기 메소드 호출
                         imageLoader(f);
                     }
                 });
 
                 //기존 첨부되어 있던 파일 배열 생성
-                for (let i = 0; i < $("#boardFileCnt").val(); i++) {
+                for(let i = 0; i < $("#boardFileCnt").val(); i++) {
                     const originFileObj = {
-                        boardNo: $("#boardNo" + i).val(),
-                        boardFileNo: $("#boardFileNo" + i).val(),
-                        boardFileName: $("#boardFileName" + i).val(),
-                        //수정되면 U, 삭제되면 D
-                        boardFileStatus: "N"
+                            boardNo: $("#boardNo" + i).val(),
+                            boardFileNo: $("#boardFileNo" + i).val(),
+                            boardFileName: $("#boardFileName" + i).val(),
+                            //수정되면 U, 삭제되면 D
+                            boardFileStatus: "N"
                     }
 
                     originFiles.push(originFileObj);
@@ -52,7 +52,7 @@
                     //배열담겨있는 파일들을 input으로 옮겨서 submit
                     dt = new DataTransfer();
 
-                    for (f in uploadFiles) {
+                    for(f in uploadFiles) {
                         let file = uploadFiles[f];
                         dt.items.add(file);
                     }
@@ -62,7 +62,7 @@
                     //수정된 파일들(changedFiles배열) input으로 옮겨담기
                     dt2 = new DataTransfer();
 
-                    for (f in changedFiles) {
+                    for(f in changedFiles) {
                         let file = changedFiles[f];
                         dt2.items.add(file);
                     }
@@ -88,7 +88,7 @@
                         success: (obj) => {
                             console.log(obj);
                             alert(obj.item.msg);
-                            location.href = '/board/board-list';
+                            location.href = `/board/board-list`;
                         },
                         error: (error) => {
                             console.log(error);
@@ -96,28 +96,28 @@
                     });
                 });
 
-                //업데이트
                 $("#btnUpdate").on("click", () => {
                     const boardNo = $("#boardNo").val();
-                    $.ajax({
-                        url: "/board/board",
-                        type: 'put',
-                        data: $("#updateForm").serialize(),
-                        success: (obj) => {
-                            console.log(obj);
-                            alert(obj.item.msg);
-                            location.href = `/board/board/${boardNo}`;
-                        },
-                        error: (Error) => {
-                            console.log(Error);
-                        }
-                    })
-                })
+
+                   $.ajax({
+                       url: "/board/board",
+                       type: 'put',
+                       data: $("#updateForm").serialize(),
+                       success: (obj) => {
+                           console.log(obj);
+                           alert(obj.item.msg);
+                           location.href = `/board/board/${boardNo}`;
+                       },
+                       error: (error) => {
+                           console.log(error);
+                       }
+                   });
+                });
             });
 
             const fnFileDown = (boardNo, boardFileNo) => {
                 window.location = "/board/fileDown.do?boardNo="
-                    + boardNo + "&boardFileNo=" + boardFileNo;
+                        + boardNo + "&boardFileNo=" + boardFileNo;
             }
 
             //미리보기 메소드
@@ -135,7 +135,7 @@
                     img.setAttribute("style", "width: 100%; height: 100%; z-index: none;");
 
                     //이미지 파일인지 아닌지 체크
-                    if (file.name.toLowerCase().match(/(.*?)\.(jpg|jpeg|png|gif|svg|bmp)$/)) {
+                    if(file.name.toLowerCase().match(/(.*?)\.(jpg|jpeg|png|gif|svg|bmp)$/)) {
                         img.src = e.target.result;
                     } else {
                         img.src = 'images/defaultFileImg.png';
@@ -157,9 +157,9 @@
                 let div = document.createElement("div");
 
                 div.setAttribute("style", "display: inline-block;"
-                    + " position: relative;"
-                    + " width: 150px; height: 120px;"
-                    + " margin: 5px; border: 1px solid #00f; z-index: 1");
+                + " position: relative;"
+                + " width: 150px; height: 120px;"
+                + " margin: 5px; border: 1px solid #00f; z-index: 1");
 
                 //잘못 올렸을 경우 삭제할 수 있는 버튼 생성
                 let btn = document.createElement("input");
@@ -167,9 +167,9 @@
                 btn.setAttribute("value", "x");
                 btn.setAttribute("delFile", file.name);
                 btn.setAttribute("style", "width: 30px; height: 30px;"
-                    + " position: absolute; right: 0px; bottom: 0px;"
-                    + " z-index: 999; background-color: rgba(255, 255, 255, 0.1);"
-                    + " color: #f00;");
+                + " position: absolute; right: 0px; bottom: 0px;"
+                + " z-index: 999; background-color: rgba(255, 255, 255, 0.1);"
+                + " color: #f00;");
 
                 //버튼 이벤트 생성
                 //버튼 클릭하면 해당 파일삭제 기능 구현
@@ -179,9 +179,9 @@
 
                     const delFile = ele.getAttribute("delFile");
 
-                    for (let i = 0; i < uploadFiles.length; i++) {
+                    for(let i = 0; i < uploadFiles.length; i++) {
                         //배열에 담겨있는 파일중 파일명이 같은 파일 삭제
-                        if (delFile === uploadFiles[i].name) {
+                        if(delFile === uploadFiles[i].name) {
                             //배열에서 i번째 하나 제거
                             uploadFiles.splice(i, 1);
                         }
@@ -195,7 +195,7 @@
 
                     dt = new DataTransfer();
 
-                    for (f in uploadFiles) {
+                    for(f in uploadFiles) {
                         const file = uploadFiles[f];
                         dt.items.add(file);
                     }
@@ -246,15 +246,15 @@
                 //미리보기 화면에서 변경된 파일 출력
                 const reader = new FileReader();
 
-                reader.onload = function (ee) {
+                reader.onload = function(ee) {
                     const img =
                         document.getElementById("img" + boardFileNo);
                     const p =
                         document.getElementById("fileName" + boardFileNo);
 
                     //이미지인지 체크
-                    if (fileArr[0].name
-                        .match(/(.*?)\.(jpg|jpeg|png|gif|bmp|svg)$/))
+                    if(fileArr[0].name
+                            .match(/(.*?)\.(jpg|jpeg|png|gif|bmp|svg)$/))
                         img.src = ee.target.result;
                     else
                         img.src = '/images/defaultFileImg.png';
@@ -264,8 +264,8 @@
                 reader.readAsDataURL(fileArr[0]);
 
                 //기존 파일 담고있는 배열(originFiles)에서 변경된 파일에 대한 정보 수정
-                for (let i = 0; i < originFiles.length; i++) {
-                    if (boardFileNo == originFiles[i].boardFileNo) {
+                for(let i = 0; i < originFiles.length; i++) {
+                    if(boardFileNo == originFiles[i].boardFileNo) {
                         originFiles[i].boardFileStatus = "U";
                         originFiles[i].newFileName = fileArr[0].name;
                     }
@@ -279,8 +279,8 @@
                 //delFile속성 가져오기
                 const delFile = ele.getAttribute("delFile");
 
-                for (let i = 0; i < originFiles.length; i++) {
-                    if (delFile == originFiles[i].boardFileNo) {
+                for(let i = 0; i < originFiles.length; i++) {
+                    if(delFile == originFiles[i].boardFileNo) {
                         originFiles[i].boardFileStatus = "D";
                     }
                 }
@@ -315,8 +315,7 @@
                         작성자
                     </td>
                     <td style="text-align: left">
-                        <input type="text" name="boardWriter" id="boardWriter" th:value="${board.boardWriter }"
-                               readonly>
+                        <input type="text" name="boardWriter" id="boardWriter" th:value="${board.boardWriter }" readonly>
                     </td>
                 </tr>
                 <tr>
@@ -324,26 +323,21 @@
                         내용
                     </td>
                     <td style="text-align: left">
-                        <textarea name="boardContent" id="boardContent" cols="40"
-                                  rows="10" th:text="${board.boardContent }"></textarea>
+                        <textarea name="boardContent" id="boardContent" cols="40" rows="10" th:text="${board.boardContent }"></textarea>
                     </td>
                 </tr>
                 <tr>
                     <td style="background: skyblue;">
                         작성일
                     </td>
-                    <td style="text-align: left"
-                        th:text="${#strings.substring(board.boardRegdate,0,10)}">
-
+                    <td style="text-align: left" th:text="${#strings.substring(board.boardRegdate, 0, 10)}">
                     </td>
                 </tr>
                 <tr>
                     <td style="background: skyblue;">
                         조회수
                     </td>
-                    <td style="text-align: left"
-                        th:text="${board.boardCnt }">
-
+                    <td style="text-align: left" th:text="${board.boardCnt}">
                     </td>
                 </tr>
                 <tr>
@@ -377,22 +371,20 @@
                                            style="display: none;"
                                            th:onchange="fnGetChangedFileInfo([[${boardFile.boardFileNo }]], event)">
 
-                                    <input th:if="${boardFileStat.last}" type="hidden" id="boardFileCnt"
-                                           name="boardFileCnt" th:value="${status.count }">
-                                    <!-- src나 href에 thymeleaf 문법으로 링크를 걸때는 @{}로 묶는다. -->
-                                    <img th:if="${boardFile.boardFileCate} == 'img'"
-                                         th:id="'img' + ${boardFile.boardFileNo }"
-                                         th:src="@{'/upload/' + ${boardFile.boardFileName }}"
-                                         style="width: 100%; height: 100%; z-index: none;
+                                        <input th:if="${boardFileStat.last}" type="hidden" id="boardFileCnt"
+                                               name="boardFileCnt" th:value="${boardFileStat.count }">
+                                            <!-- src나 href에 thymeleaf 문법으로 링크를 걸때는 @{}로 묶는다. -->
+                                            <img th:if="${boardFile.boardFileCate} == 'image'" th:id="'img' + ${boardFile.boardFileNo }"
+                                                 th:src="@{'/upload/' + ${boardFile.boardFileName }}"
+                                                 style="width: 100%; height: 100%; z-index: none;
                                                 cursor: pointer;" class="fileImg"
-                                         th:onclick="fnImageChange([[${boardFile.boardFileNo}]])">
+                                                 th:onclick="fnImageChange([[${boardFile.boardFileNo}]])">
 
-                                    <img th:unless="${boardFile.boardFielCate} == 'img'"
-                                         th:id="'img' + ${boardFile.boardFileNo }"
-                                         src="/images/defaultFileImg.png"
-                                         style="width: 100%; height: 100%; z-index: none;
+                                            <img th:unless="${boardFile.boardFileCate} == 'image'" th:id="'img' + ${boardFile.boardFileNo }"
+                                                 src="/images/defaultFileImg.png"
+                                                 style="width: 100%; height: 100%; z-index: none;
                                                 cursor: pointer;" class="fileImg"
-                                         th:onclick="fnImageChange([[${boardFile.boardFileNo}]])">
+                                                 th:onclick="fnImageChange([[${boardFile.boardFileNo}]])">
                                     <!--thymeleaf에서 사용자 정의 속성은
                                         th:data- 으로 만든다.
                                     -->
@@ -406,10 +398,9 @@
                                     <p th:id="'fileName' + ${boardFile.boardFileNo }"
                                        style="display: inline-block;
                                         font-size: 8px; cursor: pointer;"
-                                       th:onclick="fnFileDown([[${boardFile.boardNo }]], [[${boardFile.boardFileNo }]])"
-                                       th:text="${boardFile.boardFileOrigin}">
+                                       th:onclick="fnFileDown([[${boardFile.boardNo }]], [[${boardFile.boardFileNo }]])" th:text="${boardFile.boardFileOrigin}">
                                     </p>
-                                </div>
+                                    </div>
                             </div>
                         </div>
                     </td>

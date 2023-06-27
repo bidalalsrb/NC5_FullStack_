@@ -6,6 +6,8 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.List;
+
 public interface BoardFileRepository
         extends JpaRepository<BoardFile, BoardFileId> {
     //@Query: repository에 원한 쿼리를 작성하게 해주는 어노테이션
@@ -14,5 +16,9 @@ public interface BoardFileRepository
     @Query(value="SELECT IFNULL(MAX(F.BOARD_FILE_NO), 0) + 1 " +
             "           FROM T_BOARD_FILE F" +
             "           WHERE F.BOARD_NO = :boardNo", nativeQuery = true)
-    int findMaxFileNo(@Param("boardNo") int boardNo);
+    public int findMaxFileNo(@Param("boardNo") int boardNo);
+
+    List<BoardFile> findByBoardBoardNo(int boardNo);
+
+    //List<BoardFile> findByBoardNo(int boardNo);
 }

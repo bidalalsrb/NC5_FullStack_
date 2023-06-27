@@ -2,12 +2,14 @@ package com.bit.springboard.controller;
 
 import com.bit.springboard.common.FileUtils;
 import com.bit.springboard.dto.BoardDTO;
+import com.bit.springboard.dto.BoardFileDTO;
 import com.bit.springboard.dto.ResponseDTO;
 import com.bit.springboard.entity.Board;
 import com.bit.springboard.entity.BoardFile;
 import com.bit.springboard.service.BoardService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,6 +28,9 @@ import java.util.Map;
 @RequestMapping("/board")
 public class BoardController {
     private BoardService boardService;
+
+    @Value("${file.path}")
+    String attachPath;
 
     @Autowired
     public BoardController(BoardService boardService) {
@@ -65,9 +70,9 @@ public class BoardController {
                                          HttpServletRequest request) {
         ResponseDTO<Map<String, String>> responseDTO =
                     new ResponseDTO<Map<String, String>>();
-        String attachPath =
-                request.getSession().getServletContext().getRealPath("/")
-                + "/upload/";
+//        String attachPath =
+//                request.getSession().getServletContext().getRealPath("/")
+//                + "/upload/";
 
         File directory = new File(attachPath);
 
@@ -196,7 +201,18 @@ public class BoardController {
                 .boardCnt(board.getBoardCnt())
                 .build();
 
+        List<BoardFile> boardFileList = boardService.getBoardFileList(boardNo);
+
+        List<BoardFileDTO> boardFileDTOList =
+                            new ArrayList<BoardFileDTO>();
+
+        for(BoardFile boardFile : boardFileList) {
+            BoardFileDTO boardFileDTO = boardFile.EntityToDTO();
+            boardFileDTOList.add(boardFileDTO);
+        }
+
         mv.addObject("board", returnBoardDTO);
+        mv.addObject("boardFileList", boardFileDTOList);
         mv.setViewName("board/getBoard.html");
 
         return mv;

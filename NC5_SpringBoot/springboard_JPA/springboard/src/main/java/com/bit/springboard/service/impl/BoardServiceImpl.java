@@ -67,4 +67,10 @@ public class BoardServiceImpl implements BoardService {
     public void deleteBoard(int boardNo) {
         boardRepository.deleteById(boardNo);
     }
+
+    @Override
+    public List<BoardFile> getBoardFileList(int boardNo) {
+
+        return boardFileRepository.findByBoardBoardNo(boardNo);
+    }
 }

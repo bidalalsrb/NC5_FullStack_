@@ -15,4 +15,6 @@ public interface BoardService {
     void updateBoard(Board board);
 
     void deleteBoard(int boardNo);
+
+    List<BoardFile> getBoardFileList(int boardNo);
 }

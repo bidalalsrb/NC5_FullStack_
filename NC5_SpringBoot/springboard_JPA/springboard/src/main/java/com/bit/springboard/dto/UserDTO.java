@@ -1,7 +1,6 @@
-package com.bit.springboard.entity;
+package com.bit.springboard.dto;
 
-import com.bit.springboard.dto.UserDTO;
-import jakarta.persistence.*;
+import com.bit.springboard.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,33 +8,29 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-@Entity
-@Table(name = "T_USER")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class UserDTO {
     private long id;
-    @Column(unique = true)
     private String userId;
     private String userPw;
     private String userName;
     private String userEmail;
     private String userTel;
-    private LocalDateTime userRegdate = LocalDateTime.now();
+    private LocalDateTime userRegdate;
 
-    public UserDTO EntityToDTO() {
-        UserDTO userDTO = UserDTO.builder()
+    public User DTOToEntity() {
+        User user = User.builder()
                 .id(this.id)
                 .userId(this.userId)
+                .userPw(this.userPw)
                 .userEmail(this.userEmail)
                 .userName(this.userName)
                 .userTel(this.userTel)
-                .userRegdate(this.userRegdate)
+                .userRegdate(LocalDateTime.now())
                 .build();
-        return userDTO;
+        return user;
     }
 }
