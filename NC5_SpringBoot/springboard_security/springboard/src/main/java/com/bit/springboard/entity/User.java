@@ -18,7 +18,9 @@ import java.time.LocalDateTime;
 @Builder
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(
+            strategy = GenerationType.IDENTITY
+    )
     private long id;
     @Column(unique = true)
     private String userId;
@@ -27,7 +29,6 @@ public class User {
     private String userEmail;
     private String userTel;
     private LocalDateTime userRegdate = LocalDateTime.now();
-
     @Column
     @ColumnDefault("'ROLE_USER'")
     private String role;
@@ -36,12 +37,13 @@ public class User {
         UserDTO userDTO = UserDTO.builder()
                 .id(this.id)
                 .userId(this.userId)
-                .userEmail(this.userEmail)
                 .userName(this.userName)
+                .userEmail(this.userEmail)
                 .userTel(this.userTel)
                 .userRegdate(this.userRegdate)
                 .role(this.role)
                 .build();
+
         return userDTO;
     }
 }

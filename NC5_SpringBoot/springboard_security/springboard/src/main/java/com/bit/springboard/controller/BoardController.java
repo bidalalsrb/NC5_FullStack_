@@ -10,6 +10,9 @@ import com.bit.springboard.service.BoardService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -38,27 +41,24 @@ public class BoardController {
     }
 
     @GetMapping("/board-list")
-    public ModelAndView getBoardList() {
+    public ModelAndView getBoardList(@PageableDefault(page = 0, size = 10) Pageable pageable) {
         ModelAndView mv = new ModelAndView();
 
-        List<Board> boardList = boardService.getBoardList();
 
-        List<BoardDTO> boardDtoList = new ArrayList<BoardDTO>();
+        Page<Board> pageBoardList = boardService.getBoardList(pageable);
+        Page<BoardDTO> pageBoardDTOList = pageBoardList.map(pageBoard ->
+                BoardDTO.builder()
+                        .boardTitle(pageBoard.getBoardTitle())
+                        .boardCnt(pageBoard.getBoardCnt())
+                        .boardContent(pageBoard.getBoardContent())
+                        .boardWriter(pageBoard.getBoardWriter())
+                        .boardRegdate(pageBoard.getBoardRegdate().toString())
+                        .boardNo(pageBoard.getBoardNo())
+                        .build()
+        );
 
-        for(Board b : boardList) {
-            BoardDTO returnBoardDTO = BoardDTO.builder()
-                                              .boardNo(b.getBoardNo())
-                                              .boardTitle(b.getBoardTitle())
-                                              .boardContent(b.getBoardContent())
-                                              .boardWriter(b.getBoardWriter())
-                                              .boardRegdate(b.getBoardRegdate().toString())
-                                              .boardCnt(b.getBoardCnt())
-                                              .build();
 
-            boardDtoList.add(returnBoardDTO);
-        }
-
-        mv.addObject("boardList", boardDtoList);
+        mv.addObject("boardList", pageBoardDTOList);
         mv.setViewName("board/getBoardList.html");
 
         return mv;
@@ -69,14 +69,14 @@ public class BoardController {
                                          MultipartFile[] uploadFiles,
                                          HttpServletRequest request) {
         ResponseDTO<Map<String, String>> responseDTO =
-                    new ResponseDTO<Map<String, String>>();
+                new ResponseDTO<Map<String, String>>();
 //        String attachPath =
 //                request.getSession().getServletContext().getRealPath("/")
 //                + "/upload/";
 
         File directory = new File(attachPath);
 
-        if(!directory.exists()) {
+        if (!directory.exists()) {
             directory.mkdir();
         }
 
@@ -88,18 +88,18 @@ public class BoardController {
             //builder()는 모든 매개변수를 갖는 생성자를 호출하기 때문에
             //boardRegdate의 값이 null값으로 들어간다.
             Board board = Board.builder()
-                            .boardTitle(boardDTO.getBoardTitle())
-                            .boardContent(boardDTO.getBoardContent())
-                            .boardWriter(boardDTO.getBoardWriter())
-                            .boardRegdate(LocalDateTime.now())
-                            .build();
-            System.out.println("========================"+board.getBoardRegdate());
+                    .boardTitle(boardDTO.getBoardTitle())
+                    .boardContent(boardDTO.getBoardContent())
+                    .boardWriter(boardDTO.getBoardWriter())
+                    .boardRegdate(LocalDateTime.now())
+                    .build();
+            System.out.println("========================" + board.getBoardRegdate());
 
             //파일처리
-            for(int i = 0; i < uploadFiles.length; i++) {
+            for (int i = 0; i < uploadFiles.length; i++) {
                 MultipartFile file = uploadFiles[i];
 
-                if(file.getOriginalFilename() != null &&
+                if (file.getOriginalFilename() != null &&
                         !file.getOriginalFilename().equals("")) {
                     BoardFile boardFile = new BoardFile();
 
@@ -121,7 +121,7 @@ public class BoardController {
             responseDTO.setItem(returnMap);
 
             return ResponseEntity.ok().body(responseDTO);
-        } catch(Exception e) {
+        } catch (Exception e) {
             responseDTO.setStatusCode(HttpStatus.BAD_REQUEST.value());
             responseDTO.setErrorMessage(e.getMessage());
 
@@ -136,17 +136,17 @@ public class BoardController {
 
         try {
             Board board = Board.builder()
-                            .boardNo(boardDTO.getBoardNo())
-                            .boardTitle(boardDTO.getBoardTitle())
-                            .boardContent(boardDTO.getBoardContent())
-                            .boardWriter(boardDTO.getBoardWriter())
-                            .boardRegdate(
-                                    LocalDateTime.parse(
-                                            boardDTO.getBoardRegdate()
-                                    )
+                    .boardNo(boardDTO.getBoardNo())
+                    .boardTitle(boardDTO.getBoardTitle())
+                    .boardContent(boardDTO.getBoardContent())
+                    .boardWriter(boardDTO.getBoardWriter())
+                    .boardRegdate(
+                            LocalDateTime.parse(
+                                    boardDTO.getBoardRegdate()
                             )
-                            .boardCnt(boardDTO.getBoardCnt())
-                            .build();
+                    )
+                    .boardCnt(boardDTO.getBoardCnt())
+                    .build();
 
             boardService.updateBoard(board);
 
@@ -204,9 +204,9 @@ public class BoardController {
         List<BoardFile> boardFileList = boardService.getBoardFileList(boardNo);
 
         List<BoardFileDTO> boardFileDTOList =
-                            new ArrayList<BoardFileDTO>();
+                new ArrayList<BoardFileDTO>();
 
-        for(BoardFile boardFile : boardFileList) {
+        for (BoardFile boardFile : boardFileList) {
             BoardFileDTO boardFileDTO = boardFile.EntityToDTO();
             boardFileDTOList.add(boardFileDTO);
         }
@@ -226,16 +226,6 @@ public class BoardController {
 
         return mv;
     }
-
-
-
-
-
-
-
-
-
-
 
 
 }
