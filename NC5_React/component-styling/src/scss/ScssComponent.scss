@@ -1,0 +1,55 @@
+//utils.scss 임포트
+@import './utils.scss';
+
+//클래스 스타일 생성
+.ScssComponent {
+  display: flex;
+  //.ScssComponent 자손태그 중 box클래스에 대한 스타일
+
+  .box {
+    background: $red;
+    cursor: pointer;
+    transition: all 0.3s ease-in;
+
+    //box클래스와 red클래스를 모두 가지고 있는 태그에 대한 스타일
+    &.red {
+      background-color: $red;
+      //mixin 사용
+      @include square(1);
+    }
+    &.orange {
+      background-color: $orange;
+      //mixin 사용
+      @include square(2);
+    }
+    &.yellow {
+      background-color: $yellow;
+      //mixin 사용
+      @include square(3);
+    }
+    &.green {
+      background-color: $green;
+      //mixin 사용
+      @include square(4);
+    }
+    &.blue {
+      background-color: $blue;
+      //mixin 사용
+      @include square(5);
+    }
+    &.indigo {
+      background-color: $indigo;
+      //mixin 사용
+      @include square(6);
+    }
+    &.violet {
+      background-color: $violet;
+      //mixin 사용
+      @include square(7);
+    }
+    //.box hover 시 스타일
+    &:hover {
+      background-color: black;
+    }
+  }
+}

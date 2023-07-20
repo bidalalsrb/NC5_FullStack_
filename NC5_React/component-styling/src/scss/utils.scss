@@ -1,0 +1,19 @@
+//scss 파일은 전처리기가 필요하기 때문에
+//브라우저에서 바로 사용불가능하다.
+//따라서 scss파일을 수정하면 서버 재부팅이 필수
+//변수 선언하기
+$red: red;
+$orange: orange;
+$yellow: yellow;
+$green: green;
+$blue: blue;
+$indigo: indigo;
+$violet: violet;
+
+//믹스인 생성 ( 믹스인 : 재사용되는 스타일 블록을 메소드처럼 사용하는 것)
+@mixin square($size) {
+  //메소드의 변수 선언
+  $calculated: 32px * $size;
+  width: $calculated;
+  height: $calculated;
+}
