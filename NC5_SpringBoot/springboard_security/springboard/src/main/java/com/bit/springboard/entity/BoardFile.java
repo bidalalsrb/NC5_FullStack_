@@ -34,6 +34,10 @@ public class BoardFile {
     private String boardFilePath;
     private String boardFileOrigin;
     private String boardFileCate;
+    @Transient
+    private String boardFileStatus;
+    @Transient
+    private String newFileName;
 
     public BoardFileDTO EntityToDTO() {
         BoardFileDTO boardFileDTO = BoardFileDTO.builder()

@@ -14,7 +14,7 @@ public interface BoardService {
 
     void insertBoard(Board board, List<BoardFile> uploadFileList);
 
-    void updateBoard(Board board);
+    void updateBoard(Board board, List<BoardFile> uFileList);
 
     void deleteBoard(int boardNo);
 

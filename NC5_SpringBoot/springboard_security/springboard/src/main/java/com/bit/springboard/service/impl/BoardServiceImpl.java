@@ -61,8 +61,27 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public void updateBoard(Board board) {
+    public void updateBoard(Board board, List<BoardFile> uFileList) {
         boardRepository.save(board);
+
+        if(uFileList.size() > 0) {
+            for(int i = 0; i < uFileList.size(); i++) {
+                if(uFileList.get(i).getBoardFileStatus().equals("U")) {
+                    boardFileRepository.save(uFileList.get(i));
+                } else if(uFileList.get(i).getBoardFileStatus().equals("D")) {
+                    boardFileRepository.delete(uFileList.get(i));
+                } else if(uFileList.get(i).getBoardFileStatus().equals("I")) {
+                    //추가한 파일들은 boardNo은 가지고 있지만 boardFileNo가 없는 상태라
+                    //boardFileNo를 추가
+                    int boardFileNo = boardFileRepository.findMaxFileNo(
+                            uFileList.get(i).getBoard().getBoardNo());
+
+                    uFileList.get(i).setBoardFileNo(boardFileNo);
+
+                    boardFileRepository.save(uFileList.get(i));
+                }
+            }
+        }
     }
 
     @Override

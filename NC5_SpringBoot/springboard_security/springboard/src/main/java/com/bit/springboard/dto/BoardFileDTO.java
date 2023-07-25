@@ -18,6 +18,8 @@ public class BoardFileDTO {
     private String boardFilePath;
     private String boardFileOrigin;
     private String boardFileCate;
+    private String boardFileStatus;
+    private String newFileName;
 
     public BoardFile DTOToEntity() {
         Board board = Board.builder()

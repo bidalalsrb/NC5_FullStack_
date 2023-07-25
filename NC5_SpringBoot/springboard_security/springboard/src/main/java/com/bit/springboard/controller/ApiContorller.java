@@ -11,7 +11,6 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -47,7 +46,7 @@ public class ApiContorller {
             //responseDTO.setItem(boardService.getBoard(boardNo));
 
             return ResponseEntity.ok().body(responseDTO);
-        } catch (Exception e) {
+        } catch(Exception e) {
             responseDTO.setErrorMessage(e.getMessage());
 
             return ResponseEntity.badRequest().body(responseDTO);
@@ -58,7 +57,7 @@ public class ApiContorller {
     @PostMapping("/board")
     public ResponseEntity<?> insertBoard(BoardDTO boardDTO) {
         ResponseDTO<Map<String, Object>> responseDTO
-                = new ResponseDTO<Map<String, Object>>();
+                    = new ResponseDTO<Map<String, Object>>();
 
         try {
             //boardService.insertBoard(boardDTO);
@@ -87,8 +86,8 @@ public class ApiContorller {
 
         try {
             Map<String, Object> returnMap =
-                    new HashMap<String, Object>();
-            if (boardService.getBoard(boardDTO.getBoardNo()) == null) {
+                new HashMap<String, Object>();
+            if(boardService.getBoard(boardDTO.getBoardNo()) == null) {
                 returnMap.put("msg", "해당 게시글이 존재하지 않습니다.");
 
                 responseDTO.setItem(returnMap);
@@ -107,7 +106,7 @@ public class ApiContorller {
             responseDTO.setStatusCode(HttpStatus.OK.value());
 
             return ResponseEntity.ok().body(responseDTO);
-        } catch (Exception e) {
+        } catch(Exception e) {
             responseDTO.setStatusCode(HttpStatus.BAD_REQUEST.value());
             responseDTO.setErrorMessage(e.getMessage());
             return ResponseEntity.badRequest().body(responseDTO);
@@ -124,7 +123,7 @@ public class ApiContorller {
             Map<String, Object> returnMap =
                     new HashMap<String, Object>();
 
-            if (boardService.getBoard(boardDTO.getBoardNo()) == null) {
+            if(boardService.getBoard(boardDTO.getBoardNo()) == null) {
                 returnMap.put("msg", "해당 게시글이 존재하지 않습니다.");
 
                 responseDTO.setItem(returnMap);
@@ -143,30 +142,12 @@ public class ApiContorller {
             responseDTO.setItem(returnMap);
 
             return ResponseEntity.ok().body(responseDTO);
-        } catch (Exception e) {
+        } catch(Exception e) {
             responseDTO.setStatusCode(HttpStatus.BAD_REQUEST.value());
             responseDTO.setErrorMessage(e.getMessage());
             return ResponseEntity.badRequest().body(responseDTO);
         }
     }
-//
-//    @GetMapping("/board-list")
-//    public ResponseEntity<?> getBoardList() {
-//        ResponseDTO<BoardDTO> responseDTO =
-//                new ResponseDTO<BoardDTO>();
-//
-//        try {
-//            //responseDTO.setItems(boardService.getBoardList());
-//
-//            responseDTO.setStatusCode(HttpStatus.OK.value());
-//
-//            return ResponseEntity.ok().body(responseDTO);
-//        } catch (Exception e) {
-//            responseDTO.setStatusCode(HttpStatus.BAD_REQUEST.value());
-//            responseDTO.setErrorMessage(e.getMessage());
-//            return ResponseEntity.badRequest().body(responseDTO);
-//        }
-//    }
 
     @GetMapping("/testApi2")
     public Map<String, Object> testApi2(int boardNo) {
@@ -176,14 +157,14 @@ public class ApiContorller {
         returnMap.put("boardList", boardService.getBoardList());
         List<Integer> intList = new ArrayList<Integer>();
 
-        for (int i = 0; i < 100; i++) {
+        for(int i = 0; i < 100; i++) {
             intList.add(i);
         }
         returnMap.put("intList", intList);
 
         return returnMap;
     }
-
+    
     //ResponseEntity를 이용한 RESTful API
     //응답코드, 에러메시지 등을 전송해주는 객체
     //응답 바디에 전송할 데이터도 추가할 수 있다.
@@ -198,11 +179,11 @@ public class ApiContorller {
             returnMap.put("boardList", boardService.getBoardList());
             List<Integer> intList = new ArrayList<Integer>();
 
-            for (int i = 0; i < 100; i++) {
+            for(int i = 0; i < 100; i++) {
                 intList.add(i);
             }
             returnMap.put("intList", intList);
-
+            
             //응답 데이터
             responseDTO.setItem(returnMap);
             //요청 상태코드
@@ -220,31 +201,32 @@ public class ApiContorller {
         }
     }
 
-
     @GetMapping("/board-list")
-    public ResponseEntity<?> getBoardList(@PageableDefault(page = 0, size = 10) Pageable pageable) {
-
-        ResponseDTO<BoardDTO> responseDTO = new ResponseDTO<>();
+    public ResponseEntity<?> getBoardList(
+            @PageableDefault(page=0, size=10) Pageable pageable) {
+        ResponseDTO<BoardDTO> responseDTO =
+                new ResponseDTO<>();
 
         try {
             Page<Board> pageBoardList = boardService.getBoardList(pageable);
 
             Page<BoardDTO> pageBoardDTOList = pageBoardList.map(pageBoard ->
-                    BoardDTO.builder()
-                            .boardTitle(pageBoard.getBoardTitle())
-                            .boardCnt(pageBoard.getBoardCnt())
-                            .boardContent(pageBoard.getBoardContent())
-                            .boardWriter(pageBoard.getBoardWriter())
-                            .boardRegdate(pageBoard.getBoardRegdate().toString())
-                            .boardNo(pageBoard.getBoardNo())
-                            .build()
+                BoardDTO.builder()
+                        .boardTitle(pageBoard.getBoardTitle())
+                        .boardCnt(pageBoard.getBoardCnt())
+                        .boardContent(pageBoard.getBoardContent())
+                        .boardWriter(pageBoard.getBoardWriter())
+                        .boardRegdate(pageBoard.getBoardRegdate().toString())
+                        .boardNo(pageBoard.getBoardNo())
+                        .build()
             );
+
             responseDTO.setPageItems(pageBoardDTOList);
             responseDTO.setStatusCode(HttpStatus.OK.value());
 
             return ResponseEntity.ok().body(responseDTO);
 
-        } catch (Exception e) {
+        } catch(Exception e) {
             //요청 상태코드
             responseDTO.setStatusCode(HttpStatus.BAD_REQUEST.value());
             //에러가 발생하면 응답데이터 대신 에러메시지를 전송한다.
@@ -252,6 +234,8 @@ public class ApiContorller {
             return ResponseEntity.badRequest().body(responseDTO);
         }
     }
+
+
 
 
 }

@@ -1,0 +1,23 @@
+.TodoTemplate {
+  width: 512px;
+  margin-top: 6rem;
+  margin-left: auto;
+  margin-right: auto;
+  overflow: hidden;
+}
+
+//TodoTemplate 클래스의 자손 태그 app-title 클래스
+.app-title {
+  background: red;
+  color: white;
+  height: 4rem;
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+//TodoTemplate 클래스의 자손 태그 content 클래스
+.content {
+  background: white;
+}

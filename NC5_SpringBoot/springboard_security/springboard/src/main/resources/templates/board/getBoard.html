@@ -18,6 +18,16 @@
                 //thymeleaf에서 세션, 리퀘스트, 모델에 담기 값을 사용하려면
                 //script 태그에 th:inline을 선언해줘야 한다.
                 //thymeleaf 스크립트에서 자바에서 받아온 데이터 사용방법
+                const loginUser = /*[[${#authentication.principal.user.userId}]]*/;
+                const boardWriter = /*[[${board.boardWriter}]]*/;
+
+                //게시글 작성자와 로그인된 유저가 다르면 수정버튼 숨김
+                if(loginUser !== boardWriter) {
+                    $("#btnUpdate").hide();
+                    $("#btnDelete").hide();
+                    $("#boardTitle").attr("readonly", true);
+                    $("#boardContent").attr("readonly", true);
+                }
 
                 //input type="file"이 변경되면 미리보기 동작
                 $("#btnAtt").on("change", (e) => {
@@ -47,34 +57,6 @@
                     originFiles.push(originFileObj);
                 }
 
-                //updateForm 서브밋
-                $("#updateForm").on("submit", (e) => {
-                    //배열담겨있는 파일들을 input으로 옮겨서 submit
-                    dt = new DataTransfer();
-
-                    for(f in uploadFiles) {
-                        let file = uploadFiles[f];
-                        dt.items.add(file);
-                    }
-
-                    $("#btnAtt")[0].files = dt.files;
-
-                    //수정된 파일들(changedFiles배열) input으로 옮겨담기
-                    dt2 = new DataTransfer();
-
-                    for(f in changedFiles) {
-                        let file = changedFiles[f];
-                        dt2.items.add(file);
-                    }
-
-                    $("#changedFiles")[0].files = dt2.files;
-
-                    //originFiles 배열을 전송하기 위해 input에 담음
-                    //javascript 배열을 java에서 받아서 바로 사용 불가능하므로
-                    //String으로 변경해서 전송한다.
-                    $("#originFiles").val(JSON.stringify(originFiles));
-                });
-
                 //삭제 버튼 클릭했을 때
                 $("#btnDelete").on("click", (e) => {
                     e.preventDefault();
@@ -99,10 +81,47 @@
                 $("#btnUpdate").on("click", () => {
                     const boardNo = $("#boardNo").val();
 
+                    //배열담겨있는 파일들을 input으로 옮겨서 submit
+                    dt = new DataTransfer();
+
+                    for(f in uploadFiles) {
+                        let file = uploadFiles[f];
+                        dt.items.add(file);
+                    }
+
+                    $("#btnAtt")[0].files = dt.files;
+
+                    //수정된 파일들(changedFiles배열) input으로 옮겨담기
+                    dt2 = new DataTransfer();
+
+                    for(f in changedFiles) {
+                        let file = changedFiles[f];
+                        dt2.items.add(file);
+                    }
+
+                    $("#changedFiles")[0].files = dt2.files;
+
+                    //originFiles 배열을 전송하기 위해 input에 담음
+                    //javascript 배열을 java에서 받아서 바로 사용 불가능하므로
+                    //String으로 변경해서 전송한다.
+                    $("#originFiles").val(JSON.stringify(originFiles));
+
+                    //첨부파일을 전송하기 위해서는 enctype이 multipart/form-data
+                    //x-www-form-urlecoded 형식의 데이터로는 불가능하고
+                    //new FormData로 FormData객체를 하나 만들어서 전송.
+                    const formData = new FormData($("#updateForm")[0]);
+
+                    //ajax에서 FormData를 전송하기 위해서는
+                    //enctype을 multipart/form-data로 지정
+                    //processData를 false로 지정
+                    //contentType을 false로 지정
                    $.ajax({
                        url: "/board/board",
                        type: 'put',
-                       data: $("#updateForm").serialize(),
+                       enctype: 'multipart/form-data',
+                       data: formData,
+                       processData: false,
+                       contentType: false,
                        success: (obj) => {
                            console.log(obj);
                            alert(obj.item.msg);
@@ -165,7 +184,7 @@
                 let btn = document.createElement("input");
                 btn.setAttribute("type", "button");
                 btn.setAttribute("value", "x");
-                btn.setAttribute("delFile", file.name);
+                btn.setAttribute("data-delFile", file.name);
                 btn.setAttribute("style", "width: 30px; height: 30px;"
                 + " position: absolute; right: 0px; bottom: 0px;"
                 + " z-index: 999; background-color: rgba(255, 255, 255, 0.1);"
@@ -177,7 +196,7 @@
                     //클릭된 버튼
                     const ele = e.srcElement;
 
-                    const delFile = ele.getAttribute("delFile");
+                    const delFile = ele.getAttribute("data-delFile");
 
                     for(let i = 0; i < uploadFiles.length; i++) {
                         //배열에 담겨있는 파일중 파일명이 같은 파일 삭제
@@ -276,14 +295,21 @@
             const fnImgDel = (e) => {
                 //클릭된 태그 가져오기
                 const ele = e.srcElement;
+
+                console.log(ele);
+
                 //delFile속성 가져오기
-                const delFile = ele.getAttribute("delFile");
+                const delFile = ele.getAttribute("data-delFile");
+
+                console.log(delFile);
 
                 for(let i = 0; i < originFiles.length; i++) {
                     if(delFile == originFiles[i].boardFileNo) {
                         originFiles[i].boardFileStatus = "D";
                     }
                 }
+
+                console.log(originFiles);
 
                 //부모요소인 div 삭제
                 const div = ele.parentNode;
