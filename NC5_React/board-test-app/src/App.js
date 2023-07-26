@@ -1,10 +1,10 @@
 import logo from './logo.svg';
 import './App.css';
-import Test from "./components/test";
+import BoardList from "./components/BoardList";
 
 function App() {
   return (
-    <Test></Test>
+    <BoardList></BoardList>
   );
 }
 
