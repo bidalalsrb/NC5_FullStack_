@@ -37,68 +37,90 @@ function App() {
   }, []);
 
   //todoInsert에서 새로운 todo추가 하는 메소드
-  const addTodos = useCallback((text) => {
-    const todo = {
-      id: todos.length + 1,
-      text: text,
-      checked: false,
-    };
+  const addTodos = useCallback(
+    (text) => {
+      let id = 0;
+      todos.forEach( t =>{
+        if(t.id > id){
+          id = t.id
+        }
+      })
 
-    const insertTodo = async () => {
+      const todo = {
+        id: id + 1,
+        text: text,
+        checked: false,
+      };
+
+      const insertTodo = async () => {
+        try {
+          const response = await axios.post(
+            'http://localhost:9090/api/todo/todo',
+            todo,
+            {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem('ACCESS_TOKEN')}`,
+              },
+            }
+          );
+
+          setTodos(() => response.data.items);
+        } catch (e) {
+          console.log(e);
+        }
+      };
+
+      insertTodo();
+    },
+    [todos]
+  );
+
+  //일정 지우는 메소드
+  const removeTodos = useCallback((id) => {
+    //filter 메소드로 id에 해당하는 todo 삭제
+    const deleteTodo = async () => {
       try {
-        const response = await axios.post(
+        const response = await axios.delete(
           'http://localhost:9090/api/todo/todo',
-          todo,
+          {
+            params: {
+              id: id,
+            },
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('ACCESS_TOKEN')}`,
+            },
+          }
+        );
+        setTodos(() => response.data.items);
+      } catch (e) {
+        console.log(e);
+      }
+    };
+    deleteTodo();
+  }, []);
+
+  //checkBox 이벤트 발생 시 checked 변경 메소드
+  const changeChecked = useCallback((todo) => {
+    const updateTodo = async () => {
+      try {
+        const response = await axios.put(
+          'http://localhost:9090/api/todo/todo',
+          {
+            ...todo,
+            checked: !todo.checked,
+          },
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem('ACCESS_TOKEN')}`,
             },
           }
         );
-
         setTodos(() => response.data.items);
       } catch (e) {
         console.log(e);
       }
     };
-
-    insertTodo();
-  }, []);
-
-  //일정 지우는 메소드
-  const removeTodos = useCallback((id) => {
-    //filter 메소드로 id에 해당하는 todo 삭제
-    setTodos((todos) => todos.filter((todo) => todo.id !== id));
-  }, []);
-
-  //checkBox 이벤트 발생 시 checked 변경 메소드
-  const changeChecked = useCallback((id) => {
-    setTodos((todos) =>
-      //배열.map() 메소드는 새로운 배열 리턴
-      todos.map(
-        //매개변수로는 하나씩 순회하면서 사용할 변수명 원하는 대로 지정
-        //매개변수 t가 객체 형태이기 때문에 리턴되는 값도 객체형태
-        //스프레드 문법은 ...변수명
-        /*{...t} => {
-                      id: 1,
-                      text: 'react',
-                      checked: true
-                    }
-          {...t, checked: !t.checked} => {
-                                           id: 1,
-                                           text: 'react',
-                                           checked: false(!true)
-                                         }
-          {...t, checked: !t.checked, aaa: 1} => {
-                                                  id: 1,
-                                                  text: 'react',
-                                                  checked: false(!true),
-                                                  aaa: 1
-                                                }
-        */
-        (t) => (t.id === id ? { ...t, checked: !t.checked } : t)
-      )
-    );
+    updateTodo();
   }, []);
 
   return (

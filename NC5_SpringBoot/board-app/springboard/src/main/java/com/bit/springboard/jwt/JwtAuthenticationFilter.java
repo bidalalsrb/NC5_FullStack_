@@ -4,7 +4,6 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -22,14 +21,16 @@ import java.io.IOException;
 //SecurityConfiguration에 filter로 등록돼서 인증이 필요한 요청이 올때마다 
 //자동실행되도록 설정
 @Component
+
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    private final JwtTokenProvider jwtTokenProvider;
+    private final JwtAuthenticationFilter jwtTokenProvider;
 
-    public JwtAuthenticationFilter(JwtTokenProvider jwtTokenProvider) {
+    public JwtAuthenticationFilter(JwtAuthenticationFilter jwtTokenProvider) {
         this.jwtTokenProvider = jwtTokenProvider;
     }
-    
+
+
     //filter로 등록하면 자동으로 실행될 메소드
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
@@ -42,7 +43,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             //토큰 검사 및 시큐리티 등록
             if (token != null && !token.equalsIgnoreCase("null")) {
                 //유효성 검사 및 username가져오기
-                String username = jwtTokenProvider.validateAndGetUsername(token);
+                String username = jwtTokenProvider.`validateAndGetUsername`(token);
 
                 //유효성 검사 완료된 토큰 시큐리티에 인증된 사용자로 등록
                 AbstractAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(

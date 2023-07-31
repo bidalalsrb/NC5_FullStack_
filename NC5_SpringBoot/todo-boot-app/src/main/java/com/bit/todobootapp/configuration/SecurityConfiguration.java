@@ -20,6 +20,7 @@ import org.springframework.web.filter.CorsFilter;
 public class SecurityConfiguration {
     @Autowired
     private JwtAuthenticationFilter jwtAuthenticationFilter;
+
     //비밀번호 암호화를 위한 PasswordEncoder
     //복호화가 불가능. match라는 메소드를 이용해서 사용자의 입력값과 DB의 저장값을 비교
     // => true나 false 리턴, match(암호화되지 않은 값, 암호화된 값)
@@ -32,6 +33,9 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
+                .cors(httpSecurityCorsConfigurer -> {
+
+                })
                 //csrf 공격에 대한 옵션 꺼두기
                 .csrf(AbstractHttpConfigurer::disable)
                 //jwt 토큰 방식으로 인증처리를 하기 때문에 basic 인증방식 비활성화
@@ -54,12 +58,5 @@ public class SecurityConfiguration {
                 .build();
     }
 
-
-
-
-
-
-
-    
 
 }

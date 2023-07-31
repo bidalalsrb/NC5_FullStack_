@@ -15,7 +15,7 @@ const TodoListItem = ({todo, removeTodos, changeChecked}) => {
     <div className='TodoListItem'>
         {/* classnames 라이브러리를 이용한 조건부 스타일 적용 */}
         {/* checked인 클래스를 조건부로 추가하기 위한 코드 */}
-        <div className={cn('checkbox', {checked})} onClick={() => changeChecked(id)}>
+        <div className={cn('checkbox', {checked})} onClick={() => changeChecked(todo)}>
             {
                 checked ? 
                 <MdCheckBox></MdCheckBox> : 
