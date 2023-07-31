@@ -1,30 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dataSource name="studydb@localhost">
   <database-model serializer="dbm" dbms="MYSQL" family-id="MYSQL" format-version="4.48">
-    <root id="1">
-      <DefaultCasing>lower/lower</DefaultCasing>
-      <DefaultEngine>InnoDB</DefaultEngine>
-      <DefaultTmpEngine>InnoDB</DefaultTmpEngine>
-      <Grants>studydb|schema||study||ALTER|G
-studydb|schema||study||ALTER ROUTINE|G
-studydb|schema||study||CREATE|G
-studydb|schema||study||CREATE ROUTINE|G
-studydb|schema||study||CREATE TEMPORARY TABLES|G
-studydb|schema||study||CREATE VIEW|G
-studydb|schema||study||DELETE|G
-studydb|schema||study||DROP|G
-studydb|schema||study||EVENT|G
-studydb|schema||study||EXECUTE|G
-studydb|schema||study||INDEX|G
-studydb|schema||study||INSERT|G
-studydb|schema||study||LOCK TABLES|G
-studydb|schema||study||REFERENCES|G
-studydb|schema||study||SELECT|G
-studydb|schema||study||SHOW VIEW|G
-studydb|schema||study||TRIGGER|G
-studydb|schema||study||UPDATE|G</Grants>
-      <ServerVersion>8.0.33</ServerVersion>
-    </root>
+    <root id="1"/>
     <collation id="2" parent="1" name="armscii8_bin">
       <Charset>armscii8</Charset>
     </collation>
