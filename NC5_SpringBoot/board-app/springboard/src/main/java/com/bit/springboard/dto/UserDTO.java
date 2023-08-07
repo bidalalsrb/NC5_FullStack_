@@ -22,6 +22,7 @@ public class UserDTO {
     private LocalDateTime userRegdate;
     private String role;
     private String curUserPw;
+    private String token;
 
     public User DTOToEntity() {
         User user = User.builder()

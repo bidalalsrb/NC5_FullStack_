@@ -12,25 +12,10 @@ header {
     background: skyblue;
 }
 
-ul,
-li {
+ul, li {
     list-style: none;
 }
 
 .main-div li {
     font-size: 1.125rem;
-}
-
-.user-nav {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.user-nav li {
-    margin-left: 10px;
-}
-
-.user-nav li {
-    font-size: 0.9rem;
 }

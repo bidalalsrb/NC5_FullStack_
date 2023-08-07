@@ -10,25 +10,19 @@ import com.bit.springboard.entity.CustomUserDetails;
 import com.bit.springboard.service.BoardService;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import java.io.File;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 //화면단으로 이동할 때는 ModelAndView객체를 리턴해서 처리
 @RestController
@@ -45,36 +39,49 @@ public class BoardController {
     }
 
     @GetMapping("/board-list")
-    public ModelAndView getBoardList(
-            @PageableDefault(page=0, size=10) Pageable pageable,
-            //security에 있는 authentication에 접근
+    public ResponseEntity<?> getBoardList(
             @AuthenticationPrincipal CustomUserDetails customUserDetails) {
-        customUserDetails.getUser().getUserId();
-        ModelAndView mv = new ModelAndView();
+        ResponseDTO<BoardDTO> responseDTO = new ResponseDTO<>();
 
-        Page<Board> pageBoardList = boardService.getBoardList(pageable);
+        try {
+//            Page<Board> pageBoard = boardService.getBoardList(pageable);
+//
+//            Page<BoardDTO> pageBoardDTO = pageBoard.map(board ->
+//                            BoardDTO.builder()
+//                                    .boardNo(board.getBoardNo())
+//                                    .boardTitle(board.getBoardTitle())
+//                                    .boardWriter(board.getBoardWriter())
+//                                    .boardContent(board.getBoardContent())
+//                                    .boardRegdate(board.getBoardRegdate().toString())
+//                                    .boardCnt(board.getBoardCnt())
+//                                    .build()
+//            );
 
-        Page<BoardDTO> pageBoardDTOList = pageBoardList.map(pageBoard ->
-                BoardDTO.builder()
-                        .boardTitle(pageBoard.getBoardTitle())
-                        .boardCnt(pageBoard.getBoardCnt())
-                        .boardContent(pageBoard.getBoardContent())
-                        .boardWriter(pageBoard.getBoardWriter())
-                        .boardRegdate(pageBoard.getBoardRegdate().toString())
-                        .boardNo(pageBoard.getBoardNo())
-                        .build()
-        );
+            List<Board> boardList = boardService.getBoardList();
 
-        mv.addObject("boardList", pageBoardDTOList);
-        mv.setViewName("board/getBoardList.html");
+            List<BoardDTO> boardDTOList = new ArrayList<>();
 
-        return mv;
+            for(Board board : boardList) {
+                boardDTOList.add(board.EntityToDTO());
+            }
+
+            responseDTO.setItems(boardDTOList);
+            responseDTO.setStatusCode(HttpStatus.OK.value());
+
+            return ResponseEntity.ok().body(responseDTO);
+
+        } catch(Exception e) {
+            responseDTO.setStatusCode(HttpStatus.BAD_REQUEST.value());
+            responseDTO.setErrorMessage(e.getMessage());
+
+            return ResponseEntity.badRequest().body(responseDTO);
+        }
     }
 
-    @PostMapping("/board")
+    //multipart form 데이터 형식을 받기 위해 consumes 속성 지정
+    @PostMapping(value = "/board", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> insertBoard(BoardDTO boardDTO,
-                                         MultipartFile[] uploadFiles,
-                                         HttpServletRequest request) {
+                                         MultipartHttpServletRequest mphsRequest) {
         ResponseDTO<Map<String, String>> responseDTO =
                     new ResponseDTO<Map<String, String>>();
 //        String attachPath =
@@ -102,19 +109,21 @@ public class BoardController {
                             .build();
             System.out.println("========================"+board.getBoardRegdate());
 
-            //파일처리
-            for(int i = 0; i < uploadFiles.length; i++) {
-                MultipartFile file = uploadFiles[i];
+            Iterator<String> iterator = mphsRequest.getFileNames();
 
-                if(file.getOriginalFilename() != null &&
-                        !file.getOriginalFilename().equals("")) {
-                    BoardFile boardFile = new BoardFile();
+            while(iterator.hasNext()) {
+                List<MultipartFile> fileList = mphsRequest.getFiles(iterator.next());
 
-                    boardFile = FileUtils.parseFileInfo(file, attachPath);
+                for(MultipartFile multipartFile : fileList) {
+                    if(!multipartFile.isEmpty()) {
+                        BoardFile boardFile = new BoardFile();
 
-                    boardFile.setBoard(board);
+                        boardFile = FileUtils.parseFileInfo(multipartFile, attachPath);
 
-                    uploadFileList.add(boardFile);
+                        boardFile.setBoard(board);
+
+                        uploadFileList.add(boardFile);
+                    }
                 }
             }
 
@@ -136,15 +145,14 @@ public class BoardController {
         }
     }
 
-    @PutMapping("/board")
+    @PutMapping(value = "/board", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> updateBoard(BoardDTO boardDTO,
                                          MultipartFile[] uploadFiles,
                                          MultipartFile[] changedFiles,
                                          @RequestParam("originFiles") String originFiles)
                                                                         throws Exception {
         System.out.println(originFiles);
-        ResponseDTO<Map<String, String>> responseDTO =
-                new ResponseDTO<Map<String, String>>();
+        ResponseDTO<Map<String, Object>> responseDTO = new ResponseDTO<>();
 
         List<BoardFileDTO> originFileList = new ObjectMapper().readValue(originFiles,
                 new TypeReference<List<BoardFileDTO>>() {});
@@ -222,9 +230,23 @@ public class BoardController {
 
             boardService.updateBoard(board, uFileList);
 
-            Map<String, String> returnMap = new HashMap<String, String>();
+            Map<String, Object> returnMap = new HashMap<>();
 
-            returnMap.put("msg", "정상적으로 수정되었습니다.");
+            Board updateBoard = boardService.getBoard(board.getBoardNo());
+            List<BoardFile> updateBoardFileList =
+                                boardService.getBoardFileList(board.getBoardNo());
+
+            BoardDTO returnBoardDTO = updateBoard.EntityToDTO();
+
+            List<BoardFileDTO> boardFileDTOList = new ArrayList<>();
+
+            for(BoardFile boardFile : updateBoardFileList) {
+                BoardFileDTO boardFileDTO = boardFile.EntityToDTO();
+                boardFileDTOList.add(boardFileDTO);
+            }
+
+            returnMap.put("board", returnBoardDTO);
+            returnMap.put("boardFileList", boardFileDTOList);
 
             responseDTO.setItem(returnMap);
 
@@ -237,12 +259,12 @@ public class BoardController {
     }
 
     @DeleteMapping("/board")
-    public ResponseEntity<?> deleteBoard(BoardDTO boardDTO) {
+    public ResponseEntity<?> deleteBoard(@RequestParam int boardNo) {
         ResponseDTO<Map<String, String>> responseDTO =
                 new ResponseDTO<Map<String, String>>();
 
         try {
-            boardService.deleteBoard(boardDTO.getBoardNo());
+            boardService.deleteBoard(boardNo);
 
             Map<String, String> returnMap = new HashMap<String, String>();
 
@@ -259,53 +281,36 @@ public class BoardController {
     }
 
     @GetMapping("/board/{boardNo}")
-    public ModelAndView getBoard(@PathVariable int boardNo) {
-        ModelAndView mv = new ModelAndView();
+    public ResponseEntity<?> getBoard(@PathVariable int boardNo) {
+        ResponseDTO<Map<String, Object>> responseDTO = new ResponseDTO<>();
 
-        Board board = boardService.getBoard(boardNo);
+        try {
+            Board board = boardService.getBoard(boardNo);
 
-        BoardDTO returnBoardDTO = BoardDTO.builder()
-                .boardNo(board.getBoardNo())
-                .boardTitle(board.getBoardTitle())
-                .boardContent(board.getBoardContent())
-                .boardWriter(board.getBoardWriter())
-                .boardRegdate(board.getBoardRegdate().toString())
-                .boardCnt(board.getBoardCnt())
-                .build();
+            BoardDTO returnBoardDTO = board.EntityToDTO();
 
-        List<BoardFile> boardFileList = boardService.getBoardFileList(boardNo);
+            List<BoardFile> boardFileList = boardService.getBoardFileList(boardNo);
 
-        List<BoardFileDTO> boardFileDTOList =
-                            new ArrayList<BoardFileDTO>();
+            List<BoardFileDTO> boardFileDTOList = new ArrayList<>();
 
-        for(BoardFile boardFile : boardFileList) {
-            BoardFileDTO boardFileDTO = boardFile.EntityToDTO();
-            boardFileDTOList.add(boardFileDTO);
+            for (BoardFile boardFile : boardFileList) {
+                BoardFileDTO boardFileDTO = boardFile.EntityToDTO();
+                boardFileDTOList.add(boardFileDTO);
+            }
+
+            Map<String, Object> returnMap = new HashMap<>();
+
+            returnMap.put("board", returnBoardDTO);
+            returnMap.put("boardFileList", boardFileDTOList);
+
+            responseDTO.setItem(returnMap);
+            responseDTO.setStatusCode(HttpStatus.OK.value());
+
+            return ResponseEntity.ok().body(responseDTO);
+        } catch (Exception e) {
+            responseDTO.setStatusCode(HttpStatus.BAD_REQUEST.value());
+            responseDTO.setErrorMessage(e.getMessage());
+            return ResponseEntity.badRequest().body(responseDTO);
         }
-
-        mv.addObject("board", returnBoardDTO);
-        mv.addObject("boardFileList", boardFileDTOList);
-        mv.setViewName("board/getBoard.html");
-
-        return mv;
     }
-
-    @GetMapping("/insert-board-view")
-    public ModelAndView insertBoardView() {
-        ModelAndView mv = new ModelAndView();
-
-        mv.setViewName("board/insertBoard.html");
-
-        return mv;
-    }
-
-
-
-
-
-
-
-
-
-
 }

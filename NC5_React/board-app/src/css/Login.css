@@ -3,25 +3,25 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-}
+  }
 
-#loginForm {
+  #loginForm {
     width: 250px;
     text-align: center;
-}
+  }
 
-#loginForm .label-wrapper {
+  #loginForm .label-wrapper {
     margin-top: 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-}
+  }
 
-#loginForm input {
+  #loginForm input {
     width: 100%;
-}
+  }
 
-#loginForm div {
+  #loginForm div {
     display: flex;
     align-items: center;
-}
+  }

@@ -3,36 +3,43 @@ package com.bit.springboard.service.impl;
 import com.bit.springboard.entity.User;
 import com.bit.springboard.repository.UserRepository;
 import com.bit.springboard.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    @Autowired
-    public UserServiceImpl(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public User idCheck(String userId) {
         Optional<User> userOptional = userRepository.findByUserId(userId);
-        
+
         //아이디가 중복되지 않았으면 null 리턴
         if(userOptional.isEmpty()) {
             return null;
         }
-        
+
         //아이디가 중복됐으면 User엔티티 리턴
         return userOptional.get();
     }
 
     @Override
-    public void join(User user) {
-        userRepository.save(user);
+    public User join(User user) {
+        if(user == null || user.getUserId() == null) {
+            throw new RuntimeException("invalid argument");
+        }
+
+        if(userRepository.existsByUserId(user.getUserId())) {
+            throw new RuntimeException("already exist id");
+        }
+
+        return userRepository.save(user);
     }
 
     @Override
@@ -43,5 +50,20 @@ public class UserServiceImpl implements UserService {
     @Override
     public void modify(User modifyUser) {
         userRepository.save(modifyUser);
+    }
+
+    @Override
+    public User login(String userId, String userPw) {
+        Optional<User> loginUser = userRepository.findByUserId(userId);
+
+        if(loginUser.isEmpty()) {
+            throw new RuntimeException("id not exist");
+        }
+
+        if(!passwordEncoder.matches(userPw, loginUser.get().getUserPw())) {
+            throw new RuntimeException("wrong pw");
+        }
+
+        return loginUser.get();
     }
 }

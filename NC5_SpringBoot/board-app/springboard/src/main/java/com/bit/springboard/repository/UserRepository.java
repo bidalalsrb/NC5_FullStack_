@@ -22,4 +22,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
             "   set user_name = :userName",
             nativeQuery=true)
     public void updateUser(@Param("userName") String username);
+
+    boolean existsByUserId(String userId);
 }

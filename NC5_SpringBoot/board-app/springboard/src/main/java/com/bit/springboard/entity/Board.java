@@ -1,5 +1,6 @@
 package com.bit.springboard.entity;
 
+import com.bit.springboard.dto.BoardDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -61,4 +62,15 @@ public class Board {
     private String searchCondition;
     @Transient
     private String searchKeyword;
+
+    public BoardDTO EntityToDTO() {
+        return BoardDTO.builder()
+                .boardNo(this.boardNo)
+                .boardTitle(this.boardTitle)
+                .boardContent(this.boardContent)
+                .boardWriter(this.boardWriter)
+                .boardRegdate(this.boardRegdate.toString())
+                .boardCnt(this.boardCnt)
+                .build();
+    }
 }

@@ -53,6 +53,7 @@ public class SecurityConfiguration {
                     //회원가입, 로그인, 아이디중복체크 등 요청은 모든 사용자가 사용가능
                     authorizeRequests.requestMatchers("/user/join").permitAll();
                     authorizeRequests.requestMatchers("/user/login-view").permitAll();
+                    authorizeRequests.requestMatchers("/user/login").permitAll();
                     authorizeRequests.requestMatchers("/user/join-view").permitAll();
                     authorizeRequests.requestMatchers("/user/id-check").permitAll();
                     authorizeRequests.requestMatchers("/api/**").permitAll();

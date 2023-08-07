@@ -3,29 +3,29 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-}
+  }
 
-#modifyForm {
+  #modifyForm {
     width: 250px;
     text-align: center;
-}
+  }
 
-#modifyForm .label-wrapper {
+  #modifyForm .label-wrapper {
     margin-top: 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-}
+  }
 
-#modifyForm input {
+  #modifyForm input {
     width: 100%;
-}
+  }
 
-#modifyForm div {
+  #modifyForm div {
     display: flex;
     align-items: center;
-}
+  }
 
-#btnIdCheck {
+  #btnIdCheck {
     width: 50px;
-}
+  }

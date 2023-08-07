@@ -1,8 +1,7 @@
-package com.bit.todobootapp.configuration;
+package com.bit.springboard.configuration;
 
-import com.bit.todobootapp.jwt.JwtAuthenticationFilter;
-
-import org.springframework.beans.factory.annotation.Autowired;
+import com.bit.springboard.jwt.JwtAuthenticationFilter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -14,12 +13,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.filter.CorsFilter;
 
+
 @Configuration
 //Security filterchain을 구성하기 위한 어노테이션
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfiguration {
-    @Autowired
-    private JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+
     //비밀번호 암호화를 위한 PasswordEncoder
     //복호화가 불가능. match라는 메소드를 이용해서 사용자의 입력값과 DB의 저장값을 비교
     // => true나 false 리턴, match(암호화되지 않은 값, 암호화된 값)
@@ -32,28 +33,35 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
-                //WebMvcConfiguration에 따로 지정을 해놨기 때문에 리턴 없이 설정 지정
-                .cors(httpSecurityCorsConfigurer -> {
-
-                })
+                .cors(httpSecurityCorsConfigurer -> {})
                 //csrf 공격에 대한 옵션 꺼두기
                 .csrf(AbstractHttpConfigurer::disable)
-                //jwt 토큰 방식으로 인증처리를 하기 때문에 basic 인증방식 비활성화
                 .httpBasic(httpSecurityHttpBasicConfigurer -> {
                     httpSecurityHttpBasicConfigurer.disable();
                 })
-                //토큰방식을 사용하기 때문에 세션방식 사용하지 않도록 설정
                 .sessionManagement(httpSecuritySessionManagementConfigurer -> {
-                    httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+                    httpSecuritySessionManagementConfigurer.sessionCreationPolicy(
+                            SessionCreationPolicy.STATELESS
+                    );
                 })
                 //요청 주소에 대한 권한 설정
                 .authorizeHttpRequests((authorizeRequests) -> {
-                    //'/'요청과 '/api/mkember/'로 시작하는 모든 요청은 모든 사용자가 이용가능
-                    authorizeRequests.requestMatchers("/", "/api/member/**").permitAll();
+                    //'/'요청은 모든 사용자가 이용가능
+                    authorizeRequests.requestMatchers("/").permitAll();
+                    //css, js, images, upload 같은 정적 리소스들도 권한처리 필수
+                    authorizeRequests.requestMatchers("/upload/**").permitAll();
+                    //게시판 기능은 권한을 가지고 있는 사용자만 사용가능
+                    authorizeRequests.requestMatchers("/board/**").hasAnyRole("ADMIN", "USER");
+                    //관리자 페이지는 관리자만 사용가능
+                    authorizeRequests.requestMatchers("/admin/**").hasRole("ADMIN");
+                    //회원가입, 로그인, 아이디중복체크 등 요청은 모든 사용자가 사용가능
+                    authorizeRequests.requestMatchers("/user/join").permitAll();
+                    authorizeRequests.requestMatchers("/user/id-check").permitAll();
+                    authorizeRequests.requestMatchers("/user/login").permitAll();
+                    authorizeRequests.requestMatchers("/api/**").permitAll();
+                    //이외의 요청은 인증된 사용자만 사용자만 사용가능
                     authorizeRequests.anyRequest().authenticated();
                 })
-                //filter 등록
-                //매요청마다 corsfilter 실행 후 jwtAuthenticationFilter 실행
                 .addFilterAfter(jwtAuthenticationFilter, CorsFilter.class)
                 .build();
     }
